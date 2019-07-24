@@ -1,49 +1,99 @@
 <?php
 
-
-namespace services\auth;
-
+namespace frontend\services\auth;
 
 use common\essences\User;
+use common\repositories\NotFoundException;
 use common\repositories\UserRepository;
-use common\services\MailService;
-use frontend\forms\SignupForm;
+use frontend\forms\ResendVerificationEmailForm;
+use http\Exception\RuntimeException;
 use Yii;
 
-class SignUpService
+/**
+ * Created by PhpStorm.
+ * User: Tom
+ * Date: 17.07.2019
+ * Time: 9:58
+ */
+
+class SignupService
 {
     private $users;
-
-    public function __construct(UserRepository $users)
+    public function __construct()
     {
-        $this->users = $users;
+        $this->users = Yii::createObject(UserRepository::class);
     }
 
-    public function signUp(SignupForm $form)
+    /**
+     * @param \frontend\forms\SignupForm $form
+     * @return User
+     */
+    public function signup(\frontend\forms\SignupForm $form)
     {
-        $user = new User();
-        $user->username = $form->username;
-        $user->email = $form->email;
-        $user->setPassword($form->password);
-        $user->generateAuthKey();
-        $user->generateEmailVerificationToken();
+        $user = User::signup(
+            $form->username,
+            $form->email,
+            $form->password
+        );
 
-        Yii::createObject(MailService::class);
+        $this->users->save($user);
 
-        Yii::$app
+        $this->sendRequest($user->email);
+
+        return $user;
+    }
+
+    public function validateToken($token)
+    {
+        if (empty($token) || !is_string($token)) {
+            throw new \DomainException('Verify email token cannot be blank.');
+        }
+
+        try {
+            $this->users->existsByVerificationToken($token);
+        } catch (NotFoundException $e) {
+            throw new \DomainException('Wrong verify email token.');
+        }
+    }
+
+    public function confirm($token)
+    {
+        /* @var $user User*/
+        $user = $this->users->getByVerificationToken($token);
+
+        $user->confirmSignup();
+
+        $this->users->save($user);
+    }
+
+    public function sendRequest($email)
+    {
+        /* @var $user User*/
+        $user = $this->users->getByEmail($email);
+
+        if (!$user->verification_token) {
+            throw new \DomainException('Email already confirmed');
+        }
+
+        $sent = \Yii::$app
             ->mailer
             ->compose(
                 ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
-            ->setTo($this->email)
-            ->setSubject('Account registration at ' . Yii::$app->name)
+            ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . ' robot'])
+            ->setTo($email)
+            ->setSubject('Account registration at ' . \Yii::$app->name)
             ->send();
 
-        $user->save();
-        return $user;
+        if (!$sent) {
+            throw new RuntimeException('Sending error');
+        }
     }
 
+    public function resendRequest(ResendVerificationEmailForm $form)
+    {
+        $this->sendRequest($form->email);
 
+    }
 }

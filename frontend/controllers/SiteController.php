@@ -1,19 +1,20 @@
 <?php
 namespace frontend\controllers;
 
-use common\services\auth\AuthService;
+use common\forms\LoginForm;
+use common\services\AuthService;
 use DomainException;
 use frontend\forms\ResendVerificationEmailForm;
 use frontend\forms\VerifyEmailForm;
-use frontend\services\ContactService;
-use services\auth\SignUpService;
+use frontend\services\auth\PasswordResetService;
+use frontend\services\auth\SignupService;
+use frontend\services\contact\ContactService;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
 use frontend\forms\PasswordResetRequestForm;
 use frontend\forms\ResetPasswordForm;
 use frontend\forms\SignupForm;
@@ -28,17 +29,20 @@ class SiteController extends Controller
     private $authService;
     private $contactService;
     private $signUpService;
+    private $passwordResetService;
 
     public function __construct($id, $module,
                                 AuthService $authService,
                                 ContactService $contactService,
                                 SignUpService $signUpService,
+                                PasswordResetService $passwordResetService,
                                 $config = [])
     {
         parent::__construct($id, $module, $config);
         $this->authService = $authService;
         $this->contactService = $contactService;
         $this->signUpService = $signUpService;
+        $this->passwordResetService = $passwordResetService;
     }
 
     /**
@@ -52,12 +56,11 @@ class SiteController extends Controller
                 'only' => ['logout', 'signup'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
-                        'allow' => true,
-                        'roles' => ['?'],
+                        'actions' => ['index', 'signup', 'login'],
+                        'allow' => true
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'profile'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -116,11 +119,13 @@ class SiteController extends Controller
                 Yii::$app->user->login($user, $form->rememberMe ? 3600 * 24 * 30 : 0);
                 return $this->goBack();
             } catch (DomainException $e) {
+                Yii::$app->errorHandler->logException($e);
                 Yii::$app->session->setFlash('error', $e->getMessage());
+//                throw new BadRequestHttpException($e->getMessage(), 0, $e);
+                $form->password = '';
+
             }
         }
-
-        $form->password = '';
 
         return $this->render('login', [
             'model' => $form,
@@ -148,17 +153,14 @@ class SiteController extends Controller
     {
         $form = new ContactForm();
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
-            try {
-                $this->contactService->sendEmail($form);
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-                return $this->refresh();
-            } catch (DomainException $e) {
-                Yii::$app->session->setFlash('error', 'There was an error sending your message.');
-            }
+            $this->contactService->sendEmail($form);
+            Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+            return $this->refresh();
+        } else {
+            return $this->render('contact', [
+                'model' => $form,
+            ]);
         }
-        return $this->render('contact', [
-            'model' => $form,
-        ]);
     }
 
     /**
@@ -180,12 +182,8 @@ class SiteController extends Controller
     {
         $form = new SignupForm();
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
-            try {
-                $this->signUpService->signUp($form);
-            } catch () {
-
-            }
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+            $this->signUpService->signup($form);
+            Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
             return $this->goHome();
         }
 
@@ -201,19 +199,20 @@ class SiteController extends Controller
      */
     public function actionRequestPasswordReset()
     {
-        $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
+        $form = new PasswordResetRequestForm();
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $this->passwordResetService->request($form);
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-
                 return $this->goHome();
-            } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
+            } catch (DomainException $e) {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
             }
         }
 
         return $this->render('requestPasswordResetToken', [
-            'model' => $model,
+            'model' => $form,
         ]);
     }
 
@@ -226,20 +225,29 @@ class SiteController extends Controller
      */
     public function actionResetPassword($token)
     {
+        $service = $this->passwordResetService;
+
         try {
-            $model = new ResetPasswordForm($token);
-        } catch (InvalidArgumentException $e) {
+            $service->validateToken($token);
+        } catch (DomainException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password saved.');
+        $form = new ResetPasswordForm();
 
-            return $this->goHome();
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $service->reset($token, $form);
+                Yii::$app->session->setFlash('success', 'New password saved.');
+                return $this->goHome();
+            } catch (DomainException $e) {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
         }
 
         return $this->render('resetPassword', [
-            'model' => $model,
+            'model' => $form,
         ]);
     }
 
@@ -252,20 +260,24 @@ class SiteController extends Controller
      */
     public function actionVerifyEmail($token)
     {
+        $service = $this->signUpService;
+
         try {
-            $model = new VerifyEmailForm($token);
-        } catch (InvalidArgumentException $e) {
+            $service->validateToken($token);
+        } catch (DomainException $e) {
+            Yii::$app->errorHandler->logException($e);
             throw new BadRequestHttpException($e->getMessage());
         }
-        if ($user = $model->verifyEmail()) {
-            if (Yii::$app->user->login($user)) {
-                Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
-                return $this->goHome();
-            }
-        }
 
-        Yii::$app->session->setFlash('error', 'Sorry, we are unable to verify your account with provided token.');
-        return $this->goHome();
+        try {
+            $service->confirm($token);
+            Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
+            return $this->redirect('login');
+        } catch (DomainException $e) {
+            Yii::$app->errorHandler->logException($e);
+            Yii::$app->session->setFlash('error', $e->getMessage());
+            return $this->goHome();
+        }
     }
 
     /**
@@ -275,17 +287,19 @@ class SiteController extends Controller
      */
     public function actionResendVerificationEmail()
     {
-        $model = new ResendVerificationEmailForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
+        $form = new ResendVerificationEmailForm();
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $this->signUpService->resendRequest($form);
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
                 return $this->goHome();
+            } catch (DomainException $e) {
+                Yii::$app->session->setFlash('error', $e->getMessage());
             }
-            Yii::$app->session->setFlash('error', 'Sorry, we are unable to resend verification email for the provided email address.');
         }
 
         return $this->render('resendVerificationEmail', [
-            'model' => $model
+            'model' => $form
         ]);
     }
 }

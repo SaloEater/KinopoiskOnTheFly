@@ -1,6 +1,7 @@
 <?php
 namespace common\essences;
 
+
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -8,26 +9,59 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * User model
+ * This is the model class for table "user".
  *
- * @property integer $id
+ * @property int $id
  * @property string $username
+ * @property string $auth_key
  * @property string $password_hash
  * @property string $password_reset_token
- * @property string $verification_token
  * @property string $email
- * @property string $auth_key
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
+ * @property int $created_at
+ * @property int $updated_at
+ * @property string $verification_token
+ * @property int $status
  * @property string $password write-only password
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
-    const STATUS_INACTIVE = 9;
+    const STATUS_WAIT = 9;
     const STATUS_ACTIVE = 10;
 
+    public static function signup(string $username, string $email, string $password)
+    {
+        $user = new static();
+        $user->username = $username;
+        $user->email = $email;
+        $user->setPassword($password);
+        $user->generateAuthKey();
+        $user->status = self::STATUS_WAIT;
+        $user->generateEmailVerificationToken();
+        return $user;
+    }
+
+    public function confirmSignup()
+    {
+        if (!$this->isWait()) {
+            throw new \DomainException('Email is already confirmed.');
+        }
+        $this->status = self::STATUS_ACTIVE;
+    }
+
+    public function removeEmailVerificationToken()
+    {
+        $this->verification_token = null;
+    }
+
+    public function isActive()
+    {
+        return $this->status == self::STATUS_ACTIVE;
+    }
+
+    public function isWait()
+    {
+        return $this->status == self::STATUS_WAIT;
+    }
 
     /**
      * {@inheritdoc}
@@ -53,8 +87,28 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_INACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_WAIT]],
+            ['image_url', 'safe']
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'username' => 'Username',
+            'auth_key' => 'Auth Key',
+            'password_hash' => 'Password Hash',
+            'password_reset_token' => 'Password Reset Token',
+            'email' => 'Email',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'verification_token' => 'Verification Token',
         ];
     }
 
@@ -112,7 +166,7 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByVerificationToken($token) {
         return static::findOne([
             'verification_token' => $token,
-            'status' => self::STATUS_INACTIVE
+            'status' => self::STATUS_WAIT
         ]);
     }
 
@@ -169,9 +223,8 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Generates password hash from password and sets it to the model
-     *
-     * @param string $password
+     * @param $password
+     * @throws \yii\base\Exception
      */
     public function setPassword($password)
     {
@@ -191,7 +244,23 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function generatePasswordResetToken()
     {
+        if ($this->isWait()) {
+            throw new \DomainException('User has not confirmed email');
+        }
+
+        if (!empty($this->password_reset_token) && self::isPasswordResetTokenValid($this->password_reset_token)) {
+            throw new \DomainException('Token is already requested');
+        }
         $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    public function resetPassword($password)
+    {
+        if (empty($this->password_reset_token)) {
+            throw new \DomainException('Token is not requested');
+        }
+        $this->setPassword($password);
+        $this->removePasswordResetToken();
     }
 
     public function generateEmailVerificationToken()
