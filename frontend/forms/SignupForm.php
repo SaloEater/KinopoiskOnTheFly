@@ -1,19 +1,18 @@
 <?php
-
-
-namespace frontend\models;
+namespace frontend\forms;
 
 use Yii;
-use common\models\User;
 use yii\base\Model;
+use common\models\User;
 
-class ResendVerificationEmailForm extends Model
+/**
+ * Signup form
+ */
+class SignupForm extends Model
 {
-    /**
-     * @var string
-     */
+    public $username;
     public $email;
-
+    public $password;
 
     /**
      * {@inheritdoc}
@@ -21,33 +20,29 @@ class ResendVerificationEmailForm extends Model
     public function rules()
     {
         return [
+            ['username', 'trim'],
+            ['username', 'required'],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'string', 'min' => 2, 'max' => 255],
+
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
-            ['email', 'exist',
-                'targetClass' => '\common\models\User',
-                'filter' => ['status' => User::STATUS_INACTIVE],
-                'message' => 'There is no user with this email address.'
-            ],
+            ['email', 'string', 'max' => 255],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+
+            ['password', 'required'],
+            ['password', 'string', 'min' => 6],
         ];
     }
 
     /**
      * Sends confirmation email to user
-     *
+     * @param User $user user model to with email should be send
      * @return bool whether the email was sent
      */
-    public function sendEmail()
+    protected function sendEmail($user)
     {
-        $user = User::findOne([
-            'email' => $this->email,
-            'status' => User::STATUS_INACTIVE
-        ]);
-
-        if ($user === null) {
-            return false;
-        }
-
         return Yii::$app
             ->mailer
             ->compose(
