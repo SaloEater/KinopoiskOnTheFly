@@ -28,15 +28,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'title',
-            'logo',
             'producer_id',
             'rating',
-            //'country',
-            //'publish_year',
-            //'duration',
-            //'user_rating',
-            //'mraa_rating',
-            //'slug',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

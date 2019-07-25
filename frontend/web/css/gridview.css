@@ -1,0 +1,8 @@
+img {
+    max-width: 100%;
+}
+
+table td, table th {
+    text-align: center !important;
+    vertical-align: middle !important;
+}

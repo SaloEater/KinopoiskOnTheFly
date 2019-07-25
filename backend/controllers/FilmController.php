@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use common\essences\GenreList;
+use common\services\FilmsGenresService;
 use Yii;
 use common\essences\Film;
 use backend\models\FilmSearch;
@@ -14,6 +16,17 @@ use yii\filters\VerbFilter;
  */
 class FilmController extends Controller
 {
+
+    private $filmsGenresService;
+
+    public function __construct($id, $module,
+        FilmsGenresService $filmsGenresService,
+        $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $this->filmsGenresService = $filmsGenresService;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -64,14 +77,17 @@ class FilmController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Film();
+        $film = new Film();
+        $genreList = new GenreList();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($film->load(Yii::$app->request->post()) && $genreList->load(Yii::$app->request->post()) && $film->save()) {
+            $this->filmsGenresService->assignGenresToFilm($genreList, $film);
+            return $this->redirect(['view', 'id' => $film->id]);
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'model' => $film,
+            'genreList' => $genreList
         ]);
     }
 
@@ -84,14 +100,17 @@ class FilmController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $film = $this->findModel($id);
+        $genreList = GenreList::from($film);//$this->filmsGenresService->from($film);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($film->load(Yii::$app->request->post()) && $genreList->load(Yii::$app->request->post()) && $film->save()) {
+            $this->filmsGenresService->assignGenresToFilm($genreList, $film);
+            return $this->redirect(['view', 'id' => $film->id]);
         }
 
-        return $this->render('update', [
-            'model' => $model,
+        return $this->render('create', [
+            'model' => $film,
+            'genreList' => $genreList
         ]);
     }
 

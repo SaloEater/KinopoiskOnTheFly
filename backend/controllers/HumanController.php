@@ -71,7 +71,7 @@ class HumanController extends Controller
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'model' => $model
         ]);
     }
 

@@ -67,7 +67,8 @@ class GenreController extends Controller
         $model = new Genre();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->refresh();
+            //return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [

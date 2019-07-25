@@ -33,6 +33,8 @@ use yii\behaviors\SluggableBehavior;
 class Film extends \yii\db\ActiveRecord
 {
 
+    //TODO MRAA
+
     public function behaviors()
     {
         return [
@@ -83,6 +85,7 @@ class Film extends \yii\db\ActiveRecord
             'duration' => 'Продолжительность',
             'user_rating' => 'User Rating',
             'slug' => 'Slug',
+            'genre' => 'Жанры'
         ];
     }
 
@@ -143,17 +146,9 @@ class Film extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFilmsMraaRatings()
+    public function getMraaRating()
     {
-        return $this->hasMany(FilmsMraaRatings::className(), ['film_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMraaRatings()
-    {
-        return $this->hasMany(MraaRating::className(), ['id' => 'mraa_rating_id'])->viaTable('films_mraa_ratings', ['film_id' => 'id']);
+        return $this->hasMany(MraaRating::className(), ['id' => 'mraa_rating']);
     }
 
     /**

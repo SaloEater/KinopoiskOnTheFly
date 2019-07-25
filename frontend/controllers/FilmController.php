@@ -16,9 +16,14 @@ class FilmController extends \yii\web\Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider
-            ]);
+            'filterModel' => $searchModel,
+            'dataProvider' => $dataProvider
+        ]);
+    }
+
+    public function actionView($slug)
+    {
+        
     }
 
 }

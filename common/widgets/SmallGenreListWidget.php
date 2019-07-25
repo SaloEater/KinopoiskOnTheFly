@@ -5,6 +5,7 @@ namespace common\widgets;
 
 
 use common\essences\Film;
+use common\essences\GenreList;
 use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -17,15 +18,26 @@ class SmallGenreListWidget extends Widget
     public function run()
     {
         $content = '';
-        $genres = $this->film->genres;
+        $genreList = GenreList::from($this->film);
+        $genres = $genreList->genres;
         $additionalPart = '';
-        if (count($genres) > 5) {
-            array_slice($genres, 0, 5);
-            $additionalPart = Html::tag('a', '...', [
-                'url' => Url::to('')
-            ]);
+        if (count($genreList->genres) > 5) {
+            $genres = array_slice($genres, 0, 5);
+            $additionalPart = Html::a('...',
+                Url::to([$this->film->slug.'#genres']) //TODO Контроллер для жанров отдельного фильма
+            );
         }
 
-        return $content;
+        foreach ($genres as $genre) {
+            $content .= Html::a($genre->name,
+                Url::to(['/genre/'.$genre->slug]), //TODO Контроллер для жанров
+            [
+                'style' => [
+                    'cursor' => 'default'
+                ]
+            ]) . '</br>';
+        }
+
+        return $content . $additionalPart;
     }
 }

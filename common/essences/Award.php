@@ -16,6 +16,8 @@ use Yii;
  */
 class Award extends \yii\db\ActiveRecord
 {
+
+
     /**
      * {@inheritdoc}
      */

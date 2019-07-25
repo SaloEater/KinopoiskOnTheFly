@@ -1,11 +1,15 @@
 <?php
 
+use common\helpers\FilmHelper;
+use common\helpers\GenreHelper;
+use common\services\ProducerService;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model common\essences\Film */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $genreList \common\essences\GenreList*/
 ?>
 
 <div class="film-form">
@@ -16,7 +20,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'logo')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'producer_id')->textInput() ?>
+    <?= $form->field($model, 'producer_id')
+        ->dropDownList(Yii::createObject(ProducerService::class)->prepareArrayForDropdown()) ?>
 
     <?= $form->field($model, 'rating')->textInput(['maxlength' => true]) ?>
 
@@ -28,9 +33,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'user_rating')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'mraa_rating')->textInput() ?>
+    <?= $form->field($model, 'mraa_rating')
+        ->dropDownList(FilmHelper::mraaArrayForDropdown()) ?>
 
-    <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
+    <?=
+        $form->field($genreList, 'genres')
+            ->checkboxList(GenreHelper::prepareArrayForDropdown())->label('Выберите жанры');
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

@@ -19,6 +19,9 @@ use Yii;
  */
 class Human extends \yii\db\ActiveRecord
 {
+    public const ROLE_PRODUCER = 1;
+    public const ROLE_ACTOR = 2;
+
     /**
      * {@inheritdoc}
      */
@@ -33,7 +36,8 @@ class Human extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['role_id'], 'integer'],
+            ['role_id', 'default', 'value' => self::ROLE_ACTOR],
+            ['role_id', 'in', 'range' => [self::ROLE_PRODUCER, self::ROLE_ACTOR]],
             [['birth_day'], 'safe'],
             [['name', 'birth_place'], 'string', 'max' => 64],
         ];

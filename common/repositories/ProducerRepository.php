@@ -2,14 +2,14 @@
 
 namespace common\repositories;
 
-use common\essences\Role;
+use common\essences\Human;
 use Yii;
 
 class ProducerRepository extends HumanRepository
 {
     public function findAll()
     {
-        $humans = $this->_findAll($this->innerRecord, ['role_id' => $this->roleRepository->getByName(Role::$ROLE_PRODUCER)]);
-        return $humans;
+        $people = $this->_findAll($this->innerRecord, ['role_id' => Human::ROLE_PRODUCER]);
+        return $people;
     }
 }

@@ -7,12 +7,10 @@ use common\essences\Human;
 class HumanRepository extends IRepository
 {
     protected $innerRecord;
-    protected $roleRepository;
 
-    public function __construct(Human $innerRecord, RoleRepository $roleRepository)
+    public function __construct(Human $innerRecord)
     {
         $this->innerRecord = $innerRecord;
-        $this->roleRepository = $roleRepository;
     }
 
 }

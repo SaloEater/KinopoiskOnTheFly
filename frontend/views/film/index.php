@@ -2,33 +2,42 @@
 
 use backend\models\FilmSearch;
 use common\essences\Film;
+use common\widgets\SmallGenreListWidget;
 use common\widgets\SmallRatingWidget;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\web\View;
 use yii\grid\GridView;
 use yii\helpers\Html;
 
-/* @var $view yii\web\View */
-/* @var $searchModel backend\models\FilmSearch */
+/* @var $this yii\web\View */
+/* @var $filterModel backend\models\FilmSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+\frontend\assets\GridViewAsset::register($this);
 
 ?>
 
 <div class="text-view">
-    <div class="display-4">Список фильмов</div>
+    <div class="display-2 text-center">Список фильмов</div>
     <?= GridView::widget([
        'dataProvider' => $dataProvider,
-       'searchModel' => $searchModel,
+       'filterModel' => $filterModel,
        'columns' => [
            [
                'attribute' => 'logo',
                'value' => function (Film $item) {
                     return Html::img($item->logo);
-               }
+               },
+               'format' => 'raw',
+               'filter' => false
            ],
            [
-               'attribute' => 'title'
+               'attribute' => 'title',
+               'value' => function (Film $film) {
+                    return Html::a($film->title, Url::to(['/film/'.$film->slug]));
+               },
+               'format' => 'raw',
            ],
            [
                'attribute' => 'rating',
@@ -36,13 +45,14 @@ use yii\helpers\Html;
                     return SmallRatingWidget::widget([
                         'film' => $item
                     ]);
-               }
+               },
+               'format' => 'raw'
            ],
            [
                'attribute' => 'country'
            ],
            [
-               'attribute' => 'year'
+               'attribute' => 'publish_year'
            ],
            [
                'attribute' => 'genre',
@@ -50,9 +60,14 @@ use yii\helpers\Html;
                     return SmallGenreListWidget::widget([
                         'film' => $item
                     ]);
-               }
+               },
+               'format' => 'raw',
            ]
-       ]
+       ],
+       'layout' => "{items}\n{pager}",
+        'rowOptions' => [
+                'class' => 'display-3'
+        ]
     ]);
     ?>
 </div>
