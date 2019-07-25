@@ -22,23 +22,6 @@ class m190725_080443_create_human_table extends Migration
             'birth_day' => $this->timestamp(),
             'birth_place' => $this->string(64),
         ]);
-
-        // creates index for column `role_id`
-        $this->createIndex(
-            '{{%idx-human-role_id}}',
-            '{{%human}}',
-            'role_id'
-        );
-
-        // add foreign key for table `{{%role}}`
-        $this->addForeignKey(
-            '{{%fk-human-role_id}}',
-            '{{%human}}',
-            'role_id',
-            '{{%role}}',
-            'id',
-            'CASCADE'
-        );
     }
 
     /**
@@ -46,17 +29,6 @@ class m190725_080443_create_human_table extends Migration
      */
     public function safeDown()
     {
-        // drops foreign key for table `{{%role}}`
-        $this->dropForeignKey(
-            '{{%fk-human-role_id}}',
-            '{{%human}}'
-        );
-
-        // drops index for column `role_id`
-        $this->dropIndex(
-            '{{%idx-human-role_id}}',
-            '{{%human}}'
-        );
 
         $this->dropTable('{{%human}}');
     }

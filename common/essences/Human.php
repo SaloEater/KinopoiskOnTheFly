@@ -13,10 +13,9 @@ use Yii;
  * @property string $birth_day
  * @property string $birth_place
  *
- * @property Film[] $films
+ * @property Film[] $producedFilms
  * @property FilmsActors[] $filmsActors
- * @property Film[] $films0
- * @property Role $role
+ * @property Film[] $films
  */
 class Human extends \yii\db\ActiveRecord
 {
@@ -37,7 +36,6 @@ class Human extends \yii\db\ActiveRecord
             [['role_id'], 'integer'],
             [['birth_day'], 'safe'],
             [['name', 'birth_place'], 'string', 'max' => 64],
-            [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['role_id' => 'id']],
         ];
     }
 
@@ -58,7 +56,7 @@ class Human extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFilms()
+    public function getProducedFilms()
     {
         return $this->hasMany(Film::className(), ['producer_id' => 'id']);
     }
@@ -74,16 +72,8 @@ class Human extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFilms0()
+    public function getFilms()
     {
         return $this->hasMany(Film::className(), ['id' => 'film_id'])->viaTable('films_actors', ['actor_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getRole()
-    {
-        return $this->hasOne(Role::className(), ['id' => 'role_id']);
     }
 }

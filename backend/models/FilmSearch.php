@@ -17,8 +17,8 @@ class FilmSearch extends Film
     public function rules()
     {
         return [
-            [['id', 'producer_id', 'publish_year'], 'integer'],
-            [['title', 'logo', 'country', 'duration'], 'safe'],
+            [['id', 'producer_id', 'publish_year', 'mraa_rating'], 'integer'],
+            [['title', 'logo', 'country', 'duration', 'slug'], 'safe'],
             [['rating', 'user_rating'], 'number'],
         ];
     }
@@ -65,11 +65,13 @@ class FilmSearch extends Film
             'publish_year' => $this->publish_year,
             'duration' => $this->duration,
             'user_rating' => $this->user_rating,
+            'mraa_rating' => $this->mraa_rating,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'logo', $this->logo])
-            ->andFilterWhere(['like', 'country', $this->country]);
+            ->andFilterWhere(['like', 'country', $this->country])
+            ->andFilterWhere(['like', 'slug', $this->slug]);
 
         return $dataProvider;
     }

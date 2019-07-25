@@ -3,18 +3,19 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%page_type}}`.
+ * Handles the creation of table `{{%award}}`.
  */
-class m190725_075615_create_page_type_table extends Migration
+class m190725_104314_create_award_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%page_type}}', [
+        $this->createTable('{{%award}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string(64),
+            'icon' => $this->string(64),
         ]);
     }
 
@@ -23,6 +24,6 @@ class m190725_075615_create_page_type_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%page_type}}');
+        $this->dropTable('{{%award}}');
     }
 }

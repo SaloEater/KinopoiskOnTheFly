@@ -34,7 +34,7 @@ class UserRepository extends IRepository
 
     public function getByVerificationToken($token)
     {
-        if (!($user = $this->getBy($this->innerRecord, ['verification_token' => $token]))) {
+        if (!($user = $this->_getBy($this->innerRecord, ['verification_token' => $token]))) {
             throw new NotFoundException('User not found');
         }
         return $user;
@@ -42,7 +42,7 @@ class UserRepository extends IRepository
 
     public function getByEmail($email)
     {
-        $user = $this->getBy($this->innerRecord, ['email' => $email]);
+        $user = $this->_getBy($this->innerRecord, ['email' => $email]);
         return $user;
     }
 
@@ -53,13 +53,13 @@ class UserRepository extends IRepository
 
     public function getByPasswordToken($token)
     {
-        $user = $this->getBy($this->innerRecord, ['password_reset_token' => $token]);
+        $user = $this->_getBy($this->innerRecord, ['password_reset_token' => $token]);
         return $user;
     }
 
     public function getByUsername($username)
     {
-        $user = $this->getBy($this->innerRecord, ['username' => $username]);
+        $user = $this->_getBy($this->innerRecord, ['username' => $username]);
         return $user;
     }
 }

@@ -40,7 +40,9 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '<alias:\w+>' => 'site/<alias>'
+                'films' => 'film/index',
+                'post/<slug:\w+>' => 'post/view',
+                '<alias:\w+>' => 'site/<alias>',
             ],
         ],
     ],

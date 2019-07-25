@@ -3,6 +3,7 @@
 namespace common\essences;
 
 use Yii;
+use yii\behaviors\SluggableBehavior;
 
 /**
  * This is the model class for table "film".
@@ -16,19 +17,34 @@ use Yii;
  * @property int $publish_year
  * @property string $duration
  * @property double $user_rating
+ * @property int $mraa_rating
+ * @property string $slug
  *
  * @property Human $producer
  * @property FilmsActors[] $filmsActors
  * @property Human[] $actors
  * @property FilmsGenres[] $filmsGenres
  * @property Genre[] $genres
- * @property FilmsMraaRatings[] $filmsMraaRatings
- * @property MraaRating[] $mraaRatings
  * @property FilmsUserRatings[] $filmsUserRatings
  * @property UserRating[] $userRatings
+ * @property UsersFavoriteFilms[] $usersFavoriteFilms
+ * @property User[] $users
  */
 class Film extends \yii\db\ActiveRecord
 {
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => SluggableBehavior::class,
+                'attribute' => 'title',
+                'ensureUnique' => true,
+
+            ]
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -44,9 +60,9 @@ class Film extends \yii\db\ActiveRecord
     {
         return [
             [['producer_id', 'publish_year'], 'integer'],
-            [['rating', 'user_rating'], 'number'],
+            [['rating', 'user_rating', 'mraa_rating'], 'number'],
             [['duration'], 'safe'],
-            [['title', 'logo', 'country'], 'string', 'max' => 64],
+            [['title', 'logo', 'country',  'slug'], 'string', 'max' => 64],
             [['producer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Human::className(), 'targetAttribute' => ['producer_id' => 'id']],
         ];
     }
@@ -58,15 +74,46 @@ class Film extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
-            'logo' => 'Logo',
-            'producer_id' => 'Producer ID',
-            'rating' => 'Rating',
-            'country' => 'Country',
-            'publish_year' => 'Publish Year',
-            'duration' => 'Duration',
+            'title' => 'Название',
+            'logo' => 'Промо',
+            'producer_id' => 'Продюсер',
+            'rating' => 'Рейтинг',
+            'country' => 'Страна',
+            'publish_year' => 'Год выпуска',
+            'duration' => 'Продолжительность',
             'user_rating' => 'User Rating',
+            'slug' => 'Slug',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFilmsAwards()
+    {
+        return $this->hasMany(FilmsAwards::className(), ['film_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAwards()
+    {
+        return $this->hasMany(Award::className(), ['id' => 'award_id'])->viaTable('films_awards', ['film_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFilmsGenres()
+    {
+        return $this->hasMany(FilmsGenres::className(), ['film_id' => 'id']);
+    }
+
+        public function getGenres()
+    {
+        return $this->hasMany(Genre::className(), ['id' => 'genre_id'])->viaTable('films_genres',
+            ['film_id' => 'id']);
     }
 
     /**
@@ -91,22 +138,6 @@ class Film extends \yii\db\ActiveRecord
     public function getActors()
     {
         return $this->hasMany(Human::className(), ['id' => 'actor_id'])->viaTable('films_actors', ['film_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getFilmsGenres()
-    {
-        return $this->hasMany(FilmsGenres::className(), ['film_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getGenres()
-    {
-        return $this->hasMany(Genre::className(), ['id' => 'genre_id'])->viaTable('films_genres', ['film_id' => 'id']);
     }
 
     /**
@@ -139,5 +170,21 @@ class Film extends \yii\db\ActiveRecord
     public function getUserRatings()
     {
         return $this->hasMany(UserRating::className(), ['id' => 'user_rating_id'])->viaTable('films_user_ratings', ['film_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsersFavoriteFilms()
+    {
+        return $this->hasMany(UsersFavoriteFilms::className(), ['film_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsers()
+    {
+        return $this->hasMany(User::className(), ['id' => 'user_id'])->viaTable('users_favorite_films', ['film_id' => 'id']);
     }
 }

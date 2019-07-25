@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'producer_id')->textInput() ?>
 
-    <?= $form->field($model, 'rating')->textInput() ?>
+    <?= $form->field($model, 'rating')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'country')->textInput(['maxlength' => true]) ?>
 
@@ -26,7 +26,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'duration')->textInput() ?>
 
-    <?= $form->field($model, 'user_rating')->textInput() ?>
+    <?= $form->field($model, 'user_rating')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'mraa_rating')->textInput() ?>
+
+    <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

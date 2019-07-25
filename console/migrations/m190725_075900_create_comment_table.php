@@ -21,7 +21,7 @@ class m190725_075900_create_comment_table extends Migration
             'id' => $this->primaryKey(),
             'content' => $this->text(),
             'parent_id' => $this->integer()->defaultValue(null),
-            'page_type_id' => $this->integer(),
+            'table_id' => $this->integer(),
             'page_id' => $this->integer(),
             'user_id' => $this->integer(),
         ]);
@@ -39,23 +39,6 @@ class m190725_075900_create_comment_table extends Migration
             '{{%comment}}',
             'parent_id',
             '{{%comment}}',
-            'id',
-            'CASCADE'
-        );
-
-        // creates index for column `page_type_id`
-        $this->createIndex(
-            '{{%idx-comment-page_type_id}}',
-            '{{%comment}}',
-            'page_type_id'
-        );
-
-        // add foreign key for table `{{%page_type}}`
-        $this->addForeignKey(
-            '{{%fk-comment-page_type_id}}',
-            '{{%comment}}',
-            'page_type_id',
-            '{{%page_type}}',
             'id',
             'CASCADE'
         );
@@ -92,18 +75,6 @@ class m190725_075900_create_comment_table extends Migration
         // drops index for column `parent_id`
         $this->dropIndex(
             '{{%idx-comment-parent_id}}',
-            '{{%comment}}'
-        );
-
-        // drops foreign key for table `{{%page_type}}`
-        $this->dropForeignKey(
-            '{{%fk-comment-page_type_id}}',
-            '{{%comment}}'
-        );
-
-        // drops index for column `page_type_id`
-        $this->dropIndex(
-            '{{%idx-comment-page_type_id}}',
             '{{%comment}}'
         );
 

@@ -3,16 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use common\essences\Role;
-use backend\models\RoleSearch;
+use common\essences\Award;
+use backend\models\AwardSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * RoleController implements the CRUD actions for Role model.
+ * AwardController implements the CRUD actions for Award model.
  */
-class RoleController extends Controller
+class AwardController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,12 +30,12 @@ class RoleController extends Controller
     }
 
     /**
-     * Lists all Role models.
+     * Lists all Award models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new RoleSearch();
+        $searchModel = new AwardSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Displays a single Role model.
+     * Displays a single Award model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -58,13 +58,13 @@ class RoleController extends Controller
     }
 
     /**
-     * Creates a new Role model.
+     * Creates a new Award model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Role();
+        $model = new Award();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -76,7 +76,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Updates an existing Role model.
+     * Updates an existing Award model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -96,7 +96,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Deletes an existing Role model.
+     * Deletes an existing Award model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -110,15 +110,15 @@ class RoleController extends Controller
     }
 
     /**
-     * Finds the Role model based on its primary key value.
+     * Finds the Award model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Role the loaded model
+     * @return Award the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Role::findOne($id)) !== null) {
+        if (($model = Award::findOne($id)) !== null) {
             return $model;
         }
 

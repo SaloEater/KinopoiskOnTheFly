@@ -22,6 +22,11 @@ use yii\web\IdentityInterface;
  * @property string $verification_token
  * @property int $status
  * @property string $password write-only password
+ *
+ * @property Comment[] $comments
+ * @property UserRating[] $userRatings
+ * @property UsersFavoriteFilms[] $usersFavoriteFilms
+ * @property Film[] $films
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -275,4 +280,38 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+   public function getComments()
+   {
+       return $this->hasMany(Comment::className(), ['user_id' => 'id']);
+   }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+   public function getUserRatings()
+   {
+       return $this->hasMany(UserRating::className(), ['user_id' => 'id']);
+   }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+   public function getUsersFavoriteFilms()
+   {
+       return $this->hasMany(UsersFavoriteFilms::className(), ['user_id' => 'id']);
+   }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFilms()
+    {
+        return $this->hasMany(Film::className(), ['id' => 'film_id'])->viaTable('users_favorite_films', ['user_id' => 'id']);
+    }
+
+
 }

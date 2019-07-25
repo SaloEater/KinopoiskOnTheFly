@@ -38,6 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'publish_year',
             'duration',
             'user_rating',
+            'mraa_rating',
+            'slug',
         ],
     ]) ?>
 

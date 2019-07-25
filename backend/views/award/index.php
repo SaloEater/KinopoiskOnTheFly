@@ -4,18 +4,18 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\PageTypeSearch */
+/* @var $searchModel backend\models\AwardSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Page Types';
+$this->title = 'Awards';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="page-type-index">
+<div class="award-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Page Type', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Award', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'name',
+            'icon',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

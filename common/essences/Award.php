@@ -5,22 +5,23 @@ namespace common\essences;
 use Yii;
 
 /**
- * This is the model class for table "mraa_rating".
+ * This is the model class for table "award".
  *
  * @property int $id
  * @property string $name
  * @property string $icon
- * @property string $tooltip
  *
+ * @property FilmsAwards[] $filmsAwards
+ * @property Film[] $films
  */
-class MraaRating extends \yii\db\ActiveRecord
+class Award extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'mraa_rating';
+        return 'award';
     }
 
     /**
@@ -29,7 +30,6 @@ class MraaRating extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tooltip'], 'string'],
             [['name', 'icon'], 'string', 'max' => 64],
         ];
     }
@@ -43,8 +43,22 @@ class MraaRating extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'icon' => 'Icon',
-            'tooltip' => 'Tooltip',
         ];
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFilmsAwards()
+    {
+        return $this->hasMany(FilmsAwards::className(), ['award_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFilms()
+    {
+        return $this->hasMany(Film::className(), ['id' => 'film_id'])->viaTable('films_awards', ['award_id' => 'id']);
+    }
 }

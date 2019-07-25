@@ -25,6 +25,7 @@ class m190725_081148_create_film_table extends Migration
             'publish_year' => $this->integer(4),
             'duration' => $this->time(),
             'user_rating' => $this->decimal(4,2),
+            'mraa_rating' => $this->integer()
         ]);
 
         // creates index for column `producer_id`

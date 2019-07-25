@@ -17,7 +17,7 @@ class CommentSearch extends Comment
     public function rules()
     {
         return [
-            [['id', 'parent_id', 'page_type_id', 'page_id', 'user_id'], 'integer'],
+            [['id', 'parent_id', 'table_id', 'page_id', 'user_id'], 'integer'],
             [['content'], 'safe'],
         ];
     }
@@ -60,7 +60,7 @@ class CommentSearch extends Comment
         $query->andFilterWhere([
             'id' => $this->id,
             'parent_id' => $this->parent_id,
-            'page_type_id' => $this->page_type_id,
+            'table_id' => $this->table_id,
             'page_id' => $this->page_id,
             'user_id' => $this->user_id,
         ]);

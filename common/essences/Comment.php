@@ -10,11 +10,10 @@ use Yii;
  * @property int $id
  * @property string $content
  * @property int $parent_id
- * @property int $page_type_id
+ * @property int $table_id
  * @property int $page_id
  * @property int $user_id
  *
- * @property PageType $pageType
  * @property Comment $parent
  * @property Comment[] $comments
  * @property User $user
@@ -36,8 +35,7 @@ class Comment extends \yii\db\ActiveRecord
     {
         return [
             [['content'], 'string'],
-            [['parent_id', 'page_type_id', 'page_id', 'user_id'], 'integer'],
-            [['page_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => PageType::className(), 'targetAttribute' => ['page_type_id' => 'id']],
+            [['parent_id', 'table_id', 'page_id', 'user_id'], 'integer'],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Comment::className(), 'targetAttribute' => ['parent_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -52,18 +50,10 @@ class Comment extends \yii\db\ActiveRecord
             'id' => 'ID',
             'content' => 'Content',
             'parent_id' => 'Parent ID',
-            'page_type_id' => 'Page Type ID',
+            'table_id' => 'Table ID',
             'page_id' => 'Page ID',
             'user_id' => 'User ID',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPageType()
-    {
-        return $this->hasOne(PageType::className(), ['id' => 'page_type_id']);
     }
 
     /**

@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'parent_id') ?>
 
-    <?= $form->field($model, 'page_type_id') ?>
+    <?= $form->field($model, 'table_id') ?>
 
     <?= $form->field($model, 'page_id') ?>
 

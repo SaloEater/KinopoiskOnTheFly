@@ -4,12 +4,12 @@ namespace backend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\essences\Role;
+use common\essences\Award;
 
 /**
- * RoleSearch represents the model behind the search form of `common\essences\Role`.
+ * AwardSearch represents the model behind the search form of `common\essences\Award`.
  */
-class RoleSearch extends Role
+class AwardSearch extends Award
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class RoleSearch extends Role
     {
         return [
             [['id'], 'integer'],
-            [['name'], 'safe'],
+            [['name', 'icon'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class RoleSearch extends Role
      */
     public function search($params)
     {
-        $query = Role::find();
+        $query = Award::find();
 
         // add conditions that should always apply here
 
@@ -61,7 +61,8 @@ class RoleSearch extends Role
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'icon', $this->icon]);
 
         return $dataProvider;
     }
