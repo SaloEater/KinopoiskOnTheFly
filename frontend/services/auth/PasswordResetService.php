@@ -8,7 +8,7 @@
 
 namespace frontend\services\auth;
 
-use common\entities\User;
+use common\essences\User;
 use common\repositories\UserRepository;
 use frontend\forms\PasswordResetRequestForm;
 use http\Exception\RuntimeException;

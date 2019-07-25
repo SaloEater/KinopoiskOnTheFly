@@ -9,7 +9,7 @@
 namespace common\services;
 
 
-use common\entities\User;
+use common\essences\User;
 use common\forms\LoginForm;
 use common\repositories\UserRepository;
 
