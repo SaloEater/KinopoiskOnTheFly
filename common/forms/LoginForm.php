@@ -24,8 +24,8 @@ class LoginForm extends Model
             [['username', 'password'], 'required'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
+//            // password is validated by validatePassword()
+//            ['password', 'validatePassword'],
         ];
     }
 
@@ -35,16 +35,13 @@ class LoginForm extends Model
      *
      * @param string $attribute the attribute currently being validated
      */
-    public function validatePassword($attribute)
+    /*public function validatePassword($attribute)
     {
         if (!$this->hasErrors()) {
-            /**
-             * @var $user User
-             */
             $user = User::findOne(['username' => $this->username]);
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Incorrect username or password.');
             }
         }
-    }
+    }*/
 }
