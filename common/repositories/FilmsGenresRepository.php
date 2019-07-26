@@ -17,4 +17,11 @@ class FilmsGenresRepository extends IRepository
         $object = $this->_findBy($this->innerRecord, ['genre_id' => $genre_id, 'film_id' => $film_id]);
         return $object;
     }
+
+    public function findAllWithGenres(array $genres)
+    {
+        $objects = $this->_findAll($this->innerRecord, ['genre_id' => $genres]);
+
+        return $objects;
+    }
 }

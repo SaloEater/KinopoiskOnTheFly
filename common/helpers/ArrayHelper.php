@@ -29,4 +29,28 @@ class ArrayHelper
             return $carry;
         }, []);
     }
+
+    /**
+     * @param array $array
+     * @param $column
+     * @param int $maximum
+     * @return array|mixed
+     */
+    public static function getColumn(array $array, $column, int $maximum)
+    {
+        if (empty($array)) {
+            return [];
+        }
+
+        $randomIndexes = array_rand(\yii\helpers\ArrayHelper::getColumn($array, $column), $maximum);
+        $randomArray = [];
+        if (is_array($randomIndexes)) {
+            foreach ($randomIndexes as $index) {
+                $randomArray[] = $array[$index];
+            }
+        } else {
+            $randomArray = $randomIndexes;
+        }
+        return $randomArray;
+    }
 }

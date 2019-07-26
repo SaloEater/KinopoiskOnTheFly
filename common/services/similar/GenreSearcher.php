@@ -3,32 +3,30 @@
 namespace common\services\similar;
 
 use common\essences\Film;
+use common\helpers\ArrayHelper;
 use common\services\FilmsGenresService;
-use yii\helpers\ArrayHelper;
 
 class GenreSearcher
 {
-    public function forFilm(Film $film, $maximum)
+    public function forFilm(Film $film, $maximum, $minimum = 2)
     {
         $genres = $film->genres;
-        if (empty($genres)) {
-            return [];
-        }
-        $randomIndexes = array_rand(ArrayHelper::getColumn($film->genres, 'id'), $maximum);
-        $randomGenres = [];
-        if (is_array($randomIndexes)) {
-            foreach ($randomIndexes as $index) {
-                $randomGenres[] = $genres[$index];
-            }
-        } else {
-            $randomGenres = $randomIndexes;
-        }
+
+        $randomGenres = ArrayHelper::getColumn($genres, 'id', $maximum);
+
         $filmIDs = [];
+
         /* @var $filmsGenresService FilmsGenresService*/
         $filmsGenresService = \Yii::createObject(FilmsGenresService::class);
-        $length = count($randomIndexes);
-        for ($i = 2; $i < $length; $i++) {
-            array_push($filmIDs, $filmsGenresService->getFilmForList(array_rand($randomGenres));
+        $length = count($randomGenres);
+        for ($i = $length; $i >= $minimum; $i--) {
+            $randomFilmsID = ArrayHelper::getColumn(
+                $filmsGenresService->getFilmsWith($randomGenres),
+                'film_id',
+                $i);
+            foreach ($randomFilmsID as $filmId) {
+                $filmIDs[] = $filmId;
+            }
         }
 
     }

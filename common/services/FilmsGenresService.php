@@ -45,4 +45,11 @@ class FilmsGenresService
         $genreList->genres = $film->genres;
         return $genreList;
     }
+
+    public function getFilmsWith(array $genres)
+    {
+        $films = $this->filmsGenresRepository->findAllWithGenres($genres);
+
+        return $films;
+    }
 }
