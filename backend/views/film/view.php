@@ -39,7 +39,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'duration',
             'user_rating',
             'mraa_rating',
-            'slug',
         ],
     ]) ?>
 

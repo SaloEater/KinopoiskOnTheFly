@@ -9,7 +9,7 @@ class HumanHelper
     public static function rolesArrayForDropdown()
     {
         return [
-            Human::ROLE_PRODUCER => 'Продюсер',
+            Human::ROLE_PRODUCER => 'Режисёр',
             Human::ROLE_ACTOR => 'Актер',
         ];
     }

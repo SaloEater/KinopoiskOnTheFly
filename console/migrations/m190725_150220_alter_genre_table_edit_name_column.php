@@ -21,8 +21,6 @@ class m190725_150220_alter_genre_table_edit_name_column extends Migration
     public function safeDown()
     {
         $this->alterColumn('genre', 'name', $this->string(64));
-
-        return false;
     }
 
     /*

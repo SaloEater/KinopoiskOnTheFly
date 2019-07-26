@@ -1,0 +1,13 @@
+.p-r-25 {
+     padding-right: 25px;
+ }
+
+.p-b-15 {
+    padding-bottom: 15px;
+}
+
+a:hover {
+    color: black !important;
+    text-decoration: none !important;
+    font-weight: bolder;
+}

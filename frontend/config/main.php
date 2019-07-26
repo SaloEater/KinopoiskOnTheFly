@@ -41,7 +41,8 @@ return [
             'showScriptName' => false,
             'rules' => [
                 'films' => 'film/index',
-                'film/<slug:[\w\-]+>' => 'film/view',
+                'film/<id:\d+>' => 'film/view',
+                'name/<id:\d+>' => 'human/view',
                 '<alias:\w+>' => 'site/<alias>',
             ],
         ],

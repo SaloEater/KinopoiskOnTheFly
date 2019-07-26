@@ -3,7 +3,6 @@
 namespace common\essences;
 
 use Yii;
-use yii\behaviors\SluggableBehavior;
 
 /**
  * This is the model class for table "film".
@@ -18,7 +17,6 @@ use yii\behaviors\SluggableBehavior;
  * @property string $duration
  * @property double $user_rating
  * @property int $mraa_rating
- * @property string $slug
  *
  * @property Human $producer
  * @property FilmsActors[] $filmsActors
@@ -34,18 +32,6 @@ class Film extends \yii\db\ActiveRecord
 {
 
     //TODO MRAA
-
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => SluggableBehavior::class,
-                'attribute' => 'title',
-                'ensureUnique' => true,
-
-            ]
-        ];
-    }
 
     /**
      * {@inheritdoc}
@@ -64,7 +50,7 @@ class Film extends \yii\db\ActiveRecord
             [['producer_id', 'publish_year'], 'integer'],
             [['rating', 'user_rating', 'mraa_rating'], 'number'],
             [['duration'], 'safe'],
-            [['title', 'logo', 'country',  'slug'], 'string', 'max' => 64],
+            [['title', 'logo', 'country'], 'string', 'max' => 64],
             [['producer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Human::className(), 'targetAttribute' => ['producer_id' => 'id']],
         ];
     }
@@ -84,7 +70,6 @@ class Film extends \yii\db\ActiveRecord
             'publish_year' => 'Год выпуска',
             'duration' => 'Продолжительность',
             'user_rating' => 'User Rating',
-            'slug' => 'Slug',
             'genre' => 'Жанры'
         ];
     }
@@ -113,7 +98,7 @@ class Film extends \yii\db\ActiveRecord
         return $this->hasMany(FilmsGenres::className(), ['film_id' => 'id']);
     }
 
-        public function getGenres()
+    public function getGenres()
     {
         return $this->hasMany(Genre::className(), ['id' => 'genre_id'])->viaTable('films_genres',
             ['film_id' => 'id']);

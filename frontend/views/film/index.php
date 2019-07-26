@@ -15,27 +15,28 @@ use yii\helpers\Html;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 \frontend\assets\GridViewAsset::register($this);
+\frontend\assets\CommonAsset::register($this);
 
 ?>
 
 <div class="text-view">
-    <div class="display-2 text-center">Список фильмов</div>
+    <div class="display-3 text-center">Список фильмов</div>
     <?= GridView::widget([
        'dataProvider' => $dataProvider,
        'filterModel' => $filterModel,
        'columns' => [
            [
                'attribute' => 'logo',
-               'value' => function (Film $item) {
-                    return Html::img($item->logo);
+               'value' => function (Film $film) {
+                    return Html::img($film->logo);
                },
                'format' => 'raw',
-               'filter' => false
+               'filter' => false,
            ],
            [
                'attribute' => 'title',
                'value' => function (Film $film) {
-                    return Html::a($film->title, Url::to(['/film/'.$film->slug]));
+                    return Html::a($film->title, Url::to(['/film/'.$film->id]));
                },
                'format' => 'raw',
            ],
@@ -65,9 +66,6 @@ use yii\helpers\Html;
            ]
        ],
        'layout' => "{items}\n{pager}",
-        'rowOptions' => [
-                'class' => 'display-3'
-        ]
     ]);
     ?>
 </div>

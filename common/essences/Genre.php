@@ -2,32 +2,17 @@
 
 namespace common\essences;
 
-use common\behaviors\TransliteratorSlugBehaviour;
-
 /**
  * This is the model class for table "genre".
  *
  * @property int $id
  * @property string $name
- * @property string $slug
  *
  * @property FilmsGenres[] $filmsGenres
  * @property Film[] $films
  */
 class Genre extends \yii\db\ActiveRecord
 {
-
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TransliteratorSlugBehaviour::class,
-                'attribute' => 'name',
-                'transliterator' => 'Russian-Latin/BGN; Any-Latin; Latin-ASCII; NFD; [:Nonspacing Mark:] Remove; NFC;',
-                'forceUpdate' => true
-            ]
-        ];
-}
     /**
      * {@inheritdoc}
      */
@@ -42,7 +27,7 @@ class Genre extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'slug'], 'string', 'max' => 64],
+            [['name'], 'string', 'max' => 64],
         ];
     }
 
@@ -54,7 +39,6 @@ class Genre extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'slug' => 'Slug',
         ];
     }
 
