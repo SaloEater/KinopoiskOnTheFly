@@ -20,4 +20,11 @@ class FilmRepository extends IRepository
 
         return $film;
     }
+
+    public function findByIDs(array $ids)
+    {
+        $films = $this->_findAll($this->innerRecord, ['id' => $ids]);
+
+        return $films;
+    }
 }

@@ -17,6 +17,9 @@ class FilmsGenresService
 
     public function assignGenresToFilm(GenreList $genreList, Film $film)
     {
+        if (empty($genreList->genres)) {
+            return;
+        }
         foreach ($genreList->genres as $index=> $genre_id) {
             $this->createLinkBetween($genre_id, $film->id);
         }

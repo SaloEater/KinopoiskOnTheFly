@@ -28,18 +28,14 @@ class FilmController extends \yii\web\Controller
 
     public function actionIndex()
     {
-        $genreSearcher = new GenreSearcher();
-
-        print_r($genreSearcher->forFilm($this->filmRepository->getById('6'), 3));
-
-        /*$searchModel = new FilmSearch();
+        $searchModel = new FilmSearch();
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'filterModel' => $searchModel,
             'dataProvider' => $dataProvider
-        ]);*/
+        ]);
     }
 
     public function actionView($id)
@@ -47,7 +43,7 @@ class FilmController extends \yii\web\Controller
         $film = $this->filmRepository->getById($id);
 
         return $this->render('view', [
-            'film' => $film
+            'film' => $film,
         ]);
     }
 

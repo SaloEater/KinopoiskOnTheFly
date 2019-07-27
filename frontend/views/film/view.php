@@ -41,8 +41,15 @@ use yii\helpers\Url;
     ])?>
 
     <?=
-        SimilarFilms::widger([
-            'builders' => [
+        SimilarFilms::widget([
+            'searchers' => [
+                [
+                    'class' => \common\services\similar\GenreSearcher::class,
+                    'config' => [
+                        'film' => $film,
+                        'maximum' => 2
+                    ]
+                ],
 
             ]
         ]);
