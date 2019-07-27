@@ -22,6 +22,28 @@ class Human extends \yii\db\ActiveRecord
     public const ROLE_PRODUCER = 1;
     public const ROLE_ACTOR = 2;
 
+    public function getRoleName() : string
+    {
+        switch($this->role_id) {
+            case self::ROLE_PRODUCER: {
+                return 'Режисёр';
+            }
+            case self::ROLE_ACTOR: {
+                return 'Актёр';
+            }
+        }
+    }
+
+    public function isActor()
+    {
+        return $this->role_id==self::ROLE_ACTOR;
+    }
+
+    public function isProducer()
+    {
+        return $this->role_id==self::ROLE_PRODUCER;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -52,8 +74,8 @@ class Human extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'role_id' => 'Role ID',
-            'birth_day' => 'Birth Day',
-            'birth_place' => 'Birth Place',
+            'birth_day' => 'Дата рождения',
+            'birth_place' => 'Место рождения',
         ];
     }
 

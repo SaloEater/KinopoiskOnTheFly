@@ -7,7 +7,7 @@ use common\essences\Film;
 use common\repositories\FilmRepository;
 use common\repositories\GenreRepository;
 use common\services\similar\GenreBuilder;
-use common\services\similar\GenreSearcher;
+use common\services\similar\GenresSearcher;
 use common\services\similar\NameBuilder;
 use common\services\similar\ProducerBuilder;
 use Yii;

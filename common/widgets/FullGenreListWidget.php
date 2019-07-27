@@ -21,6 +21,7 @@ class FullGenreListWidget extends Widget
         $genreList = GenreList::from($this->film);
         $genres = $genreList->genres;
 
+        $i = count($genres);
         foreach ($genres as $genre) {
             $content .= Html::a($genre->name,
                     Url::to(['/genre/'.$genre->id]), //TODO Контроллер для жанров
@@ -28,11 +29,12 @@ class FullGenreListWidget extends Widget
                         'style' => [
                             'cursor' => 'default'
                         ]
-                    ]) . Html::tag('span', ', ', [
-                    'style' => [
-                        'cursor' => 'default'
-                    ]
-                ]);
+                    ]) . ($i == 1 ? '' : Html::tag('span', ', ', [
+                        'style' => [
+                            'cursor' => 'default'
+                        ]
+                    ]));
+            $i--;
         }
 
         return $content;

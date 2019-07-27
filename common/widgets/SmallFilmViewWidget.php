@@ -32,14 +32,18 @@ class SmallFilmViewWidget extends Widget
 
     public function run()
     {
-        $content = Html::img($this->film->logo)
-            . Html::a($this->film->logo,
-                Url::to(['/film/', ['id' => $this->film->id]],
+        $content = Html::img($this->film->logo, [
+            'class' => 'd-block image-holder mw-105'
+            ])
+            . Html::tag('div', $this->film->title,
                 [
-                    'class' => 'display-4 text-center'
-                ])
+                    'class' => 'text-center d-block mw-105'
+                ]
             );
 
-        return $content;
+        return Html::a($content, Url::to(['/film/'.$this->film->id]),
+            [
+                'class' => 'text-center d-block p-2'
+            ]);
     }
 }

@@ -36,20 +36,20 @@ class ArrayHelper
      * @param int $maximum
      * @return array|mixed
      */
-    public static function getColumn(array $array, $column, int $maximum)
+    public static function Rand(array $array, int $maximum)
     {
         if (empty($array)) {
             return [];
         }
 
-        $randomIndexes = array_rand(\yii\helpers\ArrayHelper::getColumn($array, $column), $maximum);
+        $randomIndexes = array_rand($array, $maximum);
         $randomArray = [];
         if (is_array($randomIndexes)) {
             foreach ($randomIndexes as $index) {
                 $randomArray[] = $array[$index];
             }
         } else {
-            $randomArray = $randomIndexes;
+            $randomArray[] = $array[$randomIndexes];
         }
         return $randomArray;
     }

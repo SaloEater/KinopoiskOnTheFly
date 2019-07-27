@@ -8,6 +8,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 \frontend\assets\CommonAsset::register($this);
+$this->title = $film->title;
 ?>
 
 
@@ -40,19 +41,27 @@ use yii\helpers\Url;
         ],
     ])?>
 
-    <?=
-        SimilarFilms::widget([
-            'searchers' => [
-                [
-                    'class' => \common\services\similar\GenreSearcher::class,
-                    'config' => [
-                        'film' => $film,
-                        'maximum' => 2
-                    ]
-                ],
-
-            ]
-        ]);
-    ?>
-
 </div>
+
+<?=
+SimilarFilms::widget([
+    'searchers' => [
+        [
+            'class' => \common\services\similar\GenresSearcher::class,
+            'config' => [
+                'film' => $film,
+                'maximum' => 5
+            ]
+        ],
+    ],
+    'restrictors' => [
+        [
+            'class' => \common\services\similar\restrictors\PublishYearRestrictor::class,
+            'config' => [
+                'year' => $film->publish_year
+            ]
+        ]
+    ],
+    'view' => SimilarFilms::$DISPLAY_FLEX
+]);
+?>

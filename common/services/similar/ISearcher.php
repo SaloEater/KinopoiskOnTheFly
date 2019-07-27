@@ -14,4 +14,6 @@ use yii\base\BaseObject;
 abstract class ISearcher extends BaseObject
 {
     abstract function search();
+
+    abstract function uniqueId();
 }

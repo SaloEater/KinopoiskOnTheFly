@@ -13,4 +13,12 @@ class HumanRepository extends IRepository
         $this->innerRecord = $innerRecord;
     }
 
+    public function getById(int $id)
+    {
+        $human = $this->_getBy($this->innerRecord, ['id' => $id]);
+
+        return $human;
+    }
+
+
 }

@@ -6,8 +6,32 @@
     padding-bottom: 15px;
 }
 
-a:hover {
+tbody a:hover {
     color: black !important;
     text-decoration: none !important;
-    font-weight: bolder;
+    font-weight: lighter;
+}
+
+table img {
+    max-height: 35%;
+}
+
+.image-holder {
+    height: 150px;
+}
+
+.mw-105 {
+    max-width: 105px;
+}
+
+.bg-light-gray {
+    background-color: lightgray;
+}
+
+.bg-777 {
+    background-color: #777;
+}
+
+.color-white {
+    color: white;
 }

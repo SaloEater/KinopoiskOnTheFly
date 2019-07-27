@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use yii\web\View;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $filterModel backend\models\FilmSearch */
@@ -17,55 +18,14 @@ use yii\helpers\Html;
 \frontend\assets\GridViewAsset::register($this);
 \frontend\assets\CommonAsset::register($this);
 
+$this->title = 'Фильмы';
 ?>
 
 <div class="text-view">
     <div class="display-3 text-center">Список фильмов</div>
-    <?= GridView::widget([
-       'dataProvider' => $dataProvider,
-       'filterModel' => $filterModel,
-       'columns' => [
-           [
-               'attribute' => 'logo',
-               'value' => function (Film $film) {
-                    return Html::img($film->logo);
-               },
-               'format' => 'raw',
-               'filter' => false,
-           ],
-           [
-               'attribute' => 'title',
-               'value' => function (Film $film) {
-                    return Html::a($film->title, Url::to(['/film/'.$film->id]));
-               },
-               'format' => 'raw',
-           ],
-           [
-               'attribute' => 'rating',
-               'value' => function ($item) {
-                    return SmallRatingWidget::widget([
-                        'film' => $item
-                    ]);
-               },
-               'format' => 'raw'
-           ],
-           [
-               'attribute' => 'country'
-           ],
-           [
-               'attribute' => 'publish_year'
-           ],
-           [
-               'attribute' => 'genre',
-               'value' => function ($item) {
-                    return SmallGenreListWidget::widget([
-                        'film' => $item
-                    ]);
-               },
-               'format' => 'raw',
-           ]
-       ],
-       'layout' => "{items}\n{pager}",
-    ]);
-    ?>
+    <?= $this->render('/utility/filmgridview', [
+        'dataProvider' => $dataProvider,
+        'filterModel' => $filterModel,
+        'id' => 'film-index'
+    ])?>
 </div>

@@ -2,6 +2,8 @@
 namespace common\repositories;
 
 use common\essences\FilmsGenres;
+use yii\db\ActiveQuery;
+use yii\db\Query;
 
 class FilmsGenresRepository extends IRepository
 {
@@ -18,10 +20,18 @@ class FilmsGenresRepository extends IRepository
         return $object;
     }
 
-    public function findAllWithGenres(array $genres)
+    public function findAllIDsWithGenres(array $genres)
     {
-        $objects = $this->_findAll($this->innerRecord, ['genre_id' => $genres]);
+        $objects = new Query();
+        $objects->select('film_id')->from($this->innerRecord::tableName());
 
-        return $objects;
+        $objects->where(['genre_id'=>$genres]);
+
+        $objects->groupBy('film_id');
+        $objects->having('COUNT(*) = '.count($genres));
+
+        $command = $objects->createCommand()->getRawSql();
+
+        return $objects->all();
     }
 }

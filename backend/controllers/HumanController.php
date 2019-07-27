@@ -67,7 +67,8 @@ class HumanController extends Controller
         $model = new Human();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //return $this->redirect(['view', 'id' => $model->id]);
+            return $this->refresh();
         }
 
         return $this->render('create', [

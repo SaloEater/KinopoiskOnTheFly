@@ -23,4 +23,10 @@ class GenreRepository extends IRepository
         return $genre;
     }
 
+    public function getById(int $id)
+    {
+        $genre = $this->_getBy($this->innerClass, ['id' => $id]);
+
+        return $genre;
+    }
 }

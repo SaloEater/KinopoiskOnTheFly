@@ -49,10 +49,12 @@ class FilmsGenresService
         return $genreList;
     }
 
-    public function getFilmsWith(array $genres)
+    public function findFilmsWith(array $genres)
     {
-        $films = $this->filmsGenresRepository->findAllWithGenres($genres);
+        $allWithGenres = $this->filmsGenresRepository->findAllIDsWithGenres($genres);
 
-        return $films;
+        return array_map(function($item) {
+            return $item['film_id'];
+        }, $allWithGenres);
     }
 }

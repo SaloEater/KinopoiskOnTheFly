@@ -43,6 +43,7 @@ return [
                 'films' => 'film/index',
                 'film/<id:\d+>' => 'film/view',
                 'name/<id:\d+>' => 'human/view',
+                'genre/<id:\d+>' => 'genre/view',
                 '<alias:\w+>' => 'site/<alias>',
             ],
         ],

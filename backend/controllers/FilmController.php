@@ -82,7 +82,8 @@ class FilmController extends Controller
 
         if ($film->load(Yii::$app->request->post()) && $genreList->load(Yii::$app->request->post()) && $film->save()) {
             $this->filmsGenresService->assignGenresToFilm($genreList, $film);
-            return $this->redirect(['view', 'id' => $film->id]);
+            //return $this->redirect(['view', 'id' => $film->id]);
+            return $this->refresh();
         }
 
         return $this->render('create', [
@@ -105,7 +106,8 @@ class FilmController extends Controller
 
         if ($film->load(Yii::$app->request->post()) && $genreList->load(Yii::$app->request->post()) && $film->save()) {
             $this->filmsGenresService->assignGenresToFilm($genreList, $film);
-            return $this->redirect(['view', 'id' => $film->id]);
+            //return $this->redirect(['view', 'id' => $film->id]);
+            return $this->redirect('index');
         }
 
         return $this->render('create', [

@@ -34,7 +34,7 @@ class SmallGenreListWidget extends Widget
         if (count($genreList->genres) > $this->count) {
             $genres = array_slice($genres, 0, $this->count);
             $additionalPart = Html::a('...',
-                Url::to([$this->film->id.'#genres']) //TODO Контроллер для жанров отдельного фильма
+                Url::to(['/film/'.$this->film->id.'#genres']) //TODO Контроллер для жанров отдельного фильма
             );
         }
 
