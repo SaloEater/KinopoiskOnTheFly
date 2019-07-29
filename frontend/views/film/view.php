@@ -131,6 +131,13 @@ TooltipAsset::register($this);
         'view' => SimilarFilms::$DISPLAY_FLEX
     ]);
     ?>
+
+    <?=
+        \common\widgets\CommentsWidget::widget([
+            'table_id' => \common\essences\Comment::TABLE_FILM,
+            'page_id' => $film->id,
+        ])
+    ?>
 </div>
 
 

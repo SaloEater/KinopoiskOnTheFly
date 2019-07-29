@@ -18,6 +18,6 @@ class UserRatingWidget extends Widget
 
     public function run()
     {
-        Pjax::begin()
+
     }
 }

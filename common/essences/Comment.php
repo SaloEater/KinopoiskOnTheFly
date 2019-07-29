@@ -20,6 +20,15 @@ use Yii;
  */
 class Comment extends \yii\db\ActiveRecord
 {
+
+    public const TABLE_FILM = 1;
+
+    public function isFilmed()
+    {
+        return $this->table_id == self::TABLE_FILM;
+    }
+
+
     /**
      * {@inheritdoc}
      */
@@ -35,7 +44,8 @@ class Comment extends \yii\db\ActiveRecord
     {
         return [
             [['content'], 'string'],
-            [['parent_id', 'table_id', 'page_id', 'user_id'], 'integer'],
+            [['parent_id', 'page_id', 'user_id'], 'integer'],
+            ['table_id', 'in', 'range' => [self::TABLE_FILM]],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Comment::className(), 'targetAttribute' => ['parent_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
