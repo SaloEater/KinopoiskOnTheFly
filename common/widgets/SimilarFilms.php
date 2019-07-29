@@ -3,6 +3,7 @@
 namespace common\widgets;
 
 use common\essences\Film;
+use common\helpers\ArrayHelper;
 use common\repositories\FilmRepository;
 use common\services\similar\ISearcher;
 use common\services\similar\restrictors\IRestrictor;
@@ -55,34 +56,41 @@ class SimilarFilms extends Widget
     public function run()
     {
         $filmIDs = [];
-        $iteratorCounter = 0;
-        do {
-            $newIDs = [];
-            /* @var $searcher ISearcher*/
-            foreach ($this->searcherObjects as $searcher) {
-                $found = $searcher->search();
-                $newIDs = array_merge($found, $newIDs);
-                $newIDs = array_unique($newIDs);
-                if (count($newIDs) > $this->maximum) {
-                    break;
-                }
-            }
 
-            /* @var $restrictor IRestrictor*/
-            foreach ($this->restrictorObjects as $restrictor) {
-                foreach ($newIDs as $index=>$filmID) {
-                    if (!$restrictor->isValidWithID($filmID)) {
-                        unset($newIDs[$index]);
+        $newIDs = [];
+        /* @var $searcher ISearcher*/
+        foreach ($this->searcherObjects as $searcher) {
+            $found = $searcher->search();
+            $newIDs = array_merge($found, $newIDs);
+            $newIDs = array_unique($newIDs);
+            if (count($newIDs) > $this->maximum) {
+                break;
+            }
+        }
+
+        if (!empty($this->restrictorObjects)) {
+            $iteratorCounter = 0;
+            do {
+                /* @var $restrictor IRestrictor*/
+                $validIDs = [];
+                foreach ($this->restrictorObjects as $restrictor) {
+                    foreach ($newIDs as $index=>$filmID) {
+                        if ($restrictor->isValidWithID($filmID)) {
+                            $validIDs[] = $newIDs[$index];
+                        }
                     }
+                    $restrictor->nextIteration();
                 }
-                $restrictor->nextIteration();
-            }
-            $filmIDs = array_merge($newIDs, $filmIDs);
-            $filmIDs = array_unique($filmIDs);
-            $iteratorCounter++;
-        } while(count($filmIDs) < $this->maximum && $iteratorCounter < 3);
+                $filmIDs = array_merge($validIDs, $filmIDs);
+                $filmIDs = array_unique($filmIDs);
+                $iteratorCounter++;
+            } while(count($filmIDs) < $this->maximum && $iteratorCounter < 3);
+        } else {
+            $filmIDs = $newIDs;
+        }
 
-        $filmIDs = array_slice($filmIDs, 0, $this->maximum);
+        $filmIDs = ArrayHelper::Rand($filmIDs, $this->maximum);
+        //$filmIDs = array_slice($filmIDs, 0, $this->maximum);
 
         $content = '';
         switch($this->display){

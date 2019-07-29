@@ -16,6 +16,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'logo')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'role_id')->dropDownList(HumanHelper::rolesArrayForDropdown()) ?>
 
     <?= $form->field($model, 'birth_day')->widget(\kartik\date\DatePicker::class,[

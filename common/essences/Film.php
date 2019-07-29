@@ -17,6 +17,8 @@ use Yii;
  * @property string $duration
  * @property double $user_rating
  * @property int $mraa_rating
+ * @property string $description
+ * @property string $tagline
  *
  * @property Human $producer
  * @property FilmsActors[] $filmsActors
@@ -31,7 +33,11 @@ use Yii;
 class Film extends \yii\db\ActiveRecord
 {
 
-    //TODO MRAA
+    public const RATING_G = 1;
+    public const RATING_PG = 2;
+    public const RATING_PG13 = 3;
+    public const RATING_R = 4;
+    public const RATING_NC17 = 5;
 
     /**
      * {@inheritdoc}
@@ -50,7 +56,9 @@ class Film extends \yii\db\ActiveRecord
             [['producer_id', 'publish_year'], 'integer'],
             [['rating', 'user_rating', 'mraa_rating'], 'number'],
             [['duration'], 'safe'],
-            [['title', 'logo', 'country'], 'string', 'max' => 64],
+            [['title', 'country'], 'string', 'max' => 64],
+            [['logo', 'tagline'], 'string', 'max' => 128],
+            [['description'], 'string'],
             [['producer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Human::className(), 'targetAttribute' => ['producer_id' => 'id']],
         ];
     }
@@ -70,7 +78,9 @@ class Film extends \yii\db\ActiveRecord
             'publish_year' => 'Год выпуска',
             'duration' => 'Продолжительность',
             'user_rating' => 'User Rating',
-            'genre' => 'Жанры'
+            'genre' => 'Жанры',
+            'mraa_rating' => 'Рейтинг MPAA',
+            'tagline' => 'Слоган'
         ];
     }
 

@@ -5,10 +5,13 @@
 
 \frontend\assets\CommonAsset::register($this);
 
-use common\essences\Human;
+use common\services\FilmService;
 use common\widgets\SimilarFilms;
 use yii\helpers\Html;
 $this->title = $human->name;
+
+\frontend\assets\CommonAsset::register($this);
+
 ?>
 
 <?= Html::tag('div', $human->name, [
@@ -16,20 +19,32 @@ $this->title = $human->name;
 ])?>
 <div class="d-flex" >
     <div class="p-r-25 p-b-15">
-        <?= 'Здесь будет лого'?>
+        <?= Html::img($human->logo)?>
     </div>
     <?=\yii\widgets\DetailView::widget([
         'model' => $human,
         'attributes' => [
             [
-                'label' => 'Профессия',
+                'label' => 'Карьера',
                 'value' => $human->getRoleName()
             ],
             [
+                'label' => 'Список жанров',
+                'value' => \common\widgets\FullGenreListWidget::widget([
+                    'source' => $human
+                ]),
+                'format' => 'raw'
+            ],
+            [
+                'label' => 'Список фильмов',
+                'value' => \common\widgets\OnelineFilmsListWidget::widget([
+                    'films' => Yii::createObject(FilmService::class)->getByHuman($human)
+                ]),
+                'format' => 'raw'
+            ],
+            [
                 'attribute' => 'birth_day',
-                'value' => function(Human $item) {
-                    return \common\helpers\DateHelper::dateString($item->birth_day);
-                }
+                'value' => \common\helpers\DateHelper::dateString($human->birth_day)
             ],
             'birth_place',
         ],
@@ -41,13 +56,14 @@ $this->title = $human->name;
 SimilarFilms::widget([
     'searchers' => [
         [
-            'class' => \common\services\similar\HumanSearcher::class,
+            'class' => \common\services\similar\BestFilmsSearcher::class,
             'config' => [
-                'human' => $human
+                'human' => $human,
+                'maximum' => 5
             ]
         ],
     ],
-    'title' => 'Фильмы',
-    'display' => SimilarFilms::$DISPLAY_GRID
+    'title' => 'Лучшие фильмы',
+    'display' => SimilarFilms::$DISPLAY_FLEX
 ]);
 ?>

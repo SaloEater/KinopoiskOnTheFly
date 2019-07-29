@@ -5,6 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\essences\Film */
 /* @var $genreList \common\essences\GenreList*/
+/* @var $actorList \common\essences\ActorList*/
 
 $this->title = 'Update Film: ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Films', 'url' => ['index']];
@@ -17,7 +18,8 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
-        'genreList' => $genreList
+        'genreList' => $genreList,
+        'actorList' => $actorList
     ]) ?>
 
 </div>

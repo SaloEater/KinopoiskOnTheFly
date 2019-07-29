@@ -2,7 +2,10 @@
 
 namespace backend\controllers;
 
+use common\essences\ActorList;
 use common\essences\GenreList;
+use common\repositories\FilmsActorsRepository;
+use common\services\FilmsActorsService;
 use common\services\FilmsGenresService;
 use Yii;
 use common\essences\Film;
@@ -19,12 +22,16 @@ class FilmController extends Controller
 
     private $filmsGenresService;
 
+    private $filmsActorsService;
+
     public function __construct($id, $module,
         FilmsGenresService $filmsGenresService,
+        FilmsActorsService $filmsActorsService,
         $config = [])
     {
         parent::__construct($id, $module, $config);
         $this->filmsGenresService = $filmsGenresService;
+        $this->filmsActorsService = $filmsActorsService;
     }
 
     /**
@@ -79,16 +86,19 @@ class FilmController extends Controller
     {
         $film = new Film();
         $genreList = new GenreList();
+        $actorList = new ActorList();
 
-        if ($film->load(Yii::$app->request->post()) && $genreList->load(Yii::$app->request->post()) && $film->save()) {
+        if ($film->load(Yii::$app->request->post()) && $genreList->load(Yii::$app->request->post()) && $actorList->load(Yii::$app->request->post()) && $film->save()) {
             $this->filmsGenresService->assignGenresToFilm($genreList, $film);
+            $this->filmsActorsService->assignActorsToFilm($actorList, $film);
             //return $this->redirect(['view', 'id' => $film->id]);
             return $this->refresh();
         }
 
         return $this->render('create', [
             'model' => $film,
-            'genreList' => $genreList
+            'genreList' => $genreList,
+            'actorList' => $actorList
         ]);
     }
 
@@ -102,17 +112,20 @@ class FilmController extends Controller
     public function actionUpdate($id)
     {
         $film = $this->findModel($id);
-        $genreList = GenreList::from($film);//$this->filmsGenresService->from($film);
+        $genreList = GenreList::fromFilm($film);//$this->filmsGenresService->from($film);
+        $actorList = ActorList::fromFilm($film);
 
-        if ($film->load(Yii::$app->request->post()) && $genreList->load(Yii::$app->request->post()) && $film->save()) {
+        if ($film->load(Yii::$app->request->post()) && $genreList->load(Yii::$app->request->post()) && $actorList->load(Yii::$app->request->post()) && $film->save()) {
             $this->filmsGenresService->assignGenresToFilm($genreList, $film);
+            $this->filmsActorsService->assignActorsToFilm($actorList, $film);
             //return $this->redirect(['view', 'id' => $film->id]);
             return $this->redirect('index');
         }
 
         return $this->render('create', [
             'model' => $film,
-            'genreList' => $genreList
+            'genreList' => $genreList,
+            'actorList' => $actorList
         ]);
     }
 

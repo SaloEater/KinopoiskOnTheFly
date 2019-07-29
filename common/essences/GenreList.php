@@ -2,11 +2,12 @@
 
 namespace common\essences;
 
+use common\services\FilmService;
 use yii\base\Model;
 
 class GenreList extends Model
 {
-    public $genres;
+    public $genres = [];
 
     public function rules()
     {
@@ -15,10 +16,26 @@ class GenreList extends Model
         ];
     }
 
-    public static function from(Film $film)
+    public static function fromFilm(Film $film)
     {
         $genreList = new static();
         $genreList->genres = $film->genres;
+        return $genreList;
+    }
+
+    public static function fromHuman(Human $human)
+    {
+        $genreList = new static();
+
+        $films = \Yii::createObject(FilmService::class)->getByHuman($human);
+
+        foreach ($films as $film)
+        {
+            $genreList->genres = array_merge($film->genres, $genreList->genres);
+        }
+
+        $genreList->genres = array_unique($genreList->genres);
+
         return $genreList;
     }
 }

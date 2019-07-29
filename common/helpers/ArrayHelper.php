@@ -42,7 +42,7 @@ class ArrayHelper
             return [];
         }
 
-        $randomIndexes = array_rand($array, $maximum);
+        $randomIndexes = array_rand($array, min(count($array), $maximum));
         $randomArray = [];
         if (is_array($randomIndexes)) {
             foreach ($randomIndexes as $index) {

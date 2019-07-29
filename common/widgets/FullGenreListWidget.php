@@ -6,19 +6,25 @@ namespace common\widgets;
 
 use common\essences\Film;
 use common\essences\GenreList;
+use common\essences\Human;
 use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
 class FullGenreListWidget extends Widget
 {
-    /* @var $film Film*/
-    public $film;
+    public $source;
 
     public function run()
     {
         $content = '';
-        $genreList = GenreList::from($this->film);
+        if ($this->source instanceof Film) {
+            $genreList = GenreList::fromFilm($this->source);
+        } else if ($this->source instanceof Human) {
+            $genreList = GenreList::fromHuman($this->source);
+        } else {
+            throw new \InvalidArgumentException('Неправильный источник для выборки жанров');
+        }
         $genres = $genreList->genres;
 
         $i = count($genres);

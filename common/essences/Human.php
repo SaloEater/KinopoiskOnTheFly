@@ -12,6 +12,7 @@ use Yii;
  * @property int $role_id
  * @property string $birth_day
  * @property string $birth_place
+ * @property string $logo
  *
  * @property Film[] $producedFilms
  * @property FilmsActors[] $filmsActors
@@ -62,6 +63,7 @@ class Human extends \yii\db\ActiveRecord
             ['role_id', 'in', 'range' => [self::ROLE_PRODUCER, self::ROLE_ACTOR]],
             [['birth_day'], 'safe'],
             [['name', 'birth_place'], 'string', 'max' => 64],
+            [['logo'], 'string', 'max' => 128],
         ];
     }
 

@@ -6,6 +6,10 @@
     padding-bottom: 15px;
 }
 
+.p-l-25 {
+    padding-left: 25px;
+}
+
 tbody a:hover {
     color: black !important;
     text-decoration: none !important;

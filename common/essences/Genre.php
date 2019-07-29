@@ -57,4 +57,9 @@ class Genre extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Film::className(), ['id' => 'film_id'])->viaTable('films_genres', ['genre_id' => 'id']);
     }
+
+    public function __toString()
+    {
+        return (string)$this->id;
+    }
 }

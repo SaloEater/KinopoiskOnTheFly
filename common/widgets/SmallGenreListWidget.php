@@ -28,7 +28,7 @@ class SmallGenreListWidget extends Widget
     public function run()
     {
         $content = '';
-        $genreList = GenreList::from($this->film);
+        $genreList = GenreList::fromFilm($this->film);
         $genres = $genreList->genres;
         $additionalPart = '';
         if (count($genreList->genres) > $this->count) {

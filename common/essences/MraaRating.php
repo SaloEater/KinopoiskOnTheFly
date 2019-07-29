@@ -15,6 +15,7 @@ use Yii;
  */
 class MraaRating extends \yii\db\ActiveRecord
 {
+
     /**
      * {@inheritdoc}
      */
