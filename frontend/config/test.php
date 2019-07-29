@@ -11,5 +11,10 @@ return [
         'request' => [
             'cookieValidationKey' => 'test',
         ],
+        'bundles' => [
+            'yii\bootstrap4\BootstrapPluginAsset' => [
+                'js'=>[]
+            ],
+        ],
     ],
 ];

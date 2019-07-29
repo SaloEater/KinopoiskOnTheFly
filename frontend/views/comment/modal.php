@@ -19,7 +19,7 @@ Modal::begin([
         'label' => $link
     ],
     'bodyOptions' => [
-        'style' => 'padding: 5px;'
+        'class' => 'p-2 pl-5 pr-5'
     ]
 ]);
 echo $this->render('@frontend/views/comment/_form', [

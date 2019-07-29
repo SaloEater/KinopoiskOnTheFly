@@ -30,24 +30,25 @@ class CommentViewWidget extends Widget
     {
         $content = $this->comment->user->username;
         if ($this->user_id) {
-            if ($this->user_id == $this->comment->user_id) {
-                $content .= ActionButtonWidget::widget([
+            $controls = '';
+            if ($this->user_id == $this->comment->user_id && !$this->comment->disabled) {
+                $controls .= ActionButtonWidget::widget([
                     'comment' => $this->comment,
                     'header' => 'Изменить комментарий',
                     'hintMessage'=> 'Изменить',
-                    'action' => \yii\helpers\Url::to('/comment/update', ['id' => $this->comment->id]),
+                    'action' => \yii\helpers\Url::to(['/comment/update', 'id' => $this->comment->id]),
                     'glyphIcon' => 'pencil'
                 ]);
 
                 $deleteTitle = Yii::t('yii', 'Удалить');
-                $deleteIcon = Html::tag('span', '', ['class' => "glyphicon glyphicon-trash"]);
-                $content .=  Html::a($deleteIcon, ['/comment/delete', 'id' => $this->comment->id], [
+                $deleteIcon = Html::tag('span', '', ['class' => "fa fa-trash"]);
+                $controls .=  Html::a($deleteIcon, \yii\helpers\Url::to(['/comment/delete', 'id' => $this->comment->id]), [
                     'title' => $deleteTitle,
                     'aria-label' => $deleteTitle,
                     'data-pjax' => '0',
                     'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
                     'data-method' => 'post',
-                    'style' => ''
+                    'class' => 'btn-sm btn-secondary ',
                 ]);
             }
 
@@ -57,11 +58,16 @@ class CommentViewWidget extends Widget
             $responseComment->parent_id = $this->comment->id;
             $responseComment->user_id = $this->user_id;
 
-            $content .= ActionButtonWidget::widget([
+            $controls .= ActionButtonWidget::widget([
                 'comment' => $responseComment,
                 'header' => 'Ответить на комментарий',
                 'hintMessage'=> 'Ответить',
-                'glyphIcon' => 'import'
+                'glyphIcon' => 'hand-o-down',
+                'action' =>  \yii\helpers\Url::to(['/comment/create'])
+            ]);
+
+            $content .= Html::tag('div', $controls, [
+               'style' => 'position:absolute; right:0.3em; bottom: 2.75em'
             ]);
         }
 
@@ -73,7 +79,7 @@ class CommentViewWidget extends Widget
 
         $paddingLeft = $this->paddingValue * $this->nestedLevel;
         $content = Html::tag('div', $content, [
-            'style' => "width: 100%;position:relative;padding: 5px 5px 5px $paddingLeft"
+            'style' => 'width: 100%;position:relative;padding: 5px 5px 5px '.$paddingLeft.'px'
         ]);
         $content .= '</br>';
         return $content;

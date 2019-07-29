@@ -25,10 +25,10 @@ use yii\widgets\ActiveForm; ?>
     echo $form->field($model, 'user_id')->hiddenInput(['value' => $model->user_id])->label(false);
     ?>
 
-    <?= $form->field($model, 'content')->textarea(['rows' => 2])->label("Оставьте комментарий") ?>
+    <?= $form->field($model, 'content')->textarea(['rows' => 2])->label("Ваш текст") ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Добавить', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Написать', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

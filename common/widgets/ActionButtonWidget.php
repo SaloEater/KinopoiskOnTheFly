@@ -30,11 +30,12 @@ class ActionButtonWidget extends Widget
     {
         $content = '';
         $title = Yii::t('yii', $this->hintMessage);
-        $icon = Html::tag('span', '', ['class' => "glyphicon glyphicon-$this->glyphIcon"]);
+        $icon = Html::tag('span', '', ['class' => "fa fa-$this->glyphIcon"]);
         $link = Html::a($icon, null, [
             'title' => $title,
             'aria-label' => $title,
-            'style' => ''
+            'style' => '',
+            'class' => 'h-100'
         ]);
 
         $content .= '   ';
@@ -42,7 +43,7 @@ class ActionButtonWidget extends Widget
             'title' => $this->header,
             'link' => $link,
             'model' => $this->comment,
-            'action' => $action??null
+            'action' => $this->action??null
         ]);
         return $content;
     }

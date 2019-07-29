@@ -29,3 +29,10 @@ SimilarFilms::widget([
     'display' => SimilarFilms::$DISPLAY_GRID
 ]);
 ?>
+
+<?=
+\common\widgets\CommentsWidget::widget([
+    'table_id' => \common\essences\Comment::TABLE_GENRE,
+    'page_id' => $genre->id,
+])
+?>

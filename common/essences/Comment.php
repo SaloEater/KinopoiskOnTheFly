@@ -13,6 +13,7 @@ use Yii;
  * @property int $table_id
  * @property int $page_id
  * @property int $user_id
+ * @property int $disabled
  *
  * @property Comment $parent
  * @property Comment[] $comments
@@ -23,9 +24,23 @@ class Comment extends \yii\db\ActiveRecord
 
     public const TABLE_FILM = 1;
 
-    public function isFilmed()
+    public function isFilmBased()
     {
         return $this->table_id == self::TABLE_FILM;
+    }
+
+    public const TABLE_GENRE = 2;
+
+    public function isGenreBased()
+    {
+        return $this->table_id = self::TABLE_GENRE;
+    }
+
+    public const TABLE_HUMAN = 3;
+
+    public function isHumanBased()
+    {
+        return $this->table_id = self::TABLE_HUMAN;
     }
 
 

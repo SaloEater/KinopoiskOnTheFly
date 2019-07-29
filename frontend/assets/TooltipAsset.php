@@ -8,7 +8,6 @@
 
 namespace frontend\assets;
 
-
 use yii\web\AssetBundle;
 
 class TooltipAsset extends AssetBundle

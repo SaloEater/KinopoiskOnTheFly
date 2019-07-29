@@ -3,13 +3,14 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use yii\bootstrap4\Nav;
+use yii\bootstrap4\NavBar;
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
 AppAsset::register($this);
+\frontend\assets\FontAwesomeAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -31,29 +32,27 @@ AppAsset::register($this);
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar-inverse navbar-fixed-top bg-dark navbar-dark',
         ],
         'innerContainerOptions' => [
-            'class' => 'container d-block'
+            'class' => 'container d-flex justify-between'
         ]
     ]);
-    $menuItems = [
-        /*['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],*/
-    ];
+    $menuItems = [];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Зарегистрироваться', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'Войти', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Зарегистрироваться', 'url' => ['/site/signup'], 'active' => true];
+        $menuItems[] = ['label' => 'Войти', 'url' => ['/site/login'], 'active' => true];
     } else {
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
+        $menuItems[] = '<div >'
+            . Html::beginForm(['/site/logout'], 'post',[
+                    'class' => 'active nav-link'
+            ])
             . Html::submitButton(
                 'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
+                ['class' => 'btn logout','style'=>'color:#fff;']
             )
             . Html::endForm()
-            . '</li>';
+            . '</div>';
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],

@@ -36,4 +36,27 @@ class CommentRepository extends IRepository
 
         return $comments;
     }
+
+    public function getById($id)
+    {
+        $comment = $this->_getBy($this->innerRecord, ['id' => $id]);
+
+        return $comment;
+    }
+
+    public function delete(Comment $comment)
+    {
+        foreach ($comment->comments as $child) {
+            $child->parent_id = $comment->parent_id;
+            $this->save($child);
+        }
+        $comment->delete();
+    }
+
+    public function save(Comment $comment)
+    {
+        if (!$comment->save()) {
+            throw new \DomainException('Ошибка при сохранении');
+        }
+    }
 }

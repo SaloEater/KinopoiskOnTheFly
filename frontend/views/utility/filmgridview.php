@@ -11,16 +11,9 @@
 
 use yii\widgets\Pjax; ?>
 
-<?php Pjax::begin([
-    'timeout' => false,
-    'enablePushState' => false,
-    'id' => $id
-
-])?>
 <?= \common\widgets\FilmGridViewWidget::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $filterModel
 ]);
 ?>
 
-<?php Pjax::end()?>

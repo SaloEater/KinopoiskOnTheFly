@@ -13,6 +13,7 @@ use common\essences\Comment;
 use common\repositories\CommentRepository;
 use Yii;
 use yii\base\Widget;
+use yii\helpers\Html;
 
 class CommentsWidget extends Widget
 {
@@ -23,7 +24,7 @@ class CommentsWidget extends Widget
 
     public function run()
     {
-        $content = '';
+        $content = 'Комментарии пользователей</br>';
 
         if (Yii::$app->user->isGuest) {
             $user_id = null;
@@ -36,7 +37,7 @@ class CommentsWidget extends Widget
 
             $content .= $this->render('@frontend/views/comment/_form', [
                 'model' => $comment,
-                'action' => '/comment/create'
+                'action' => '/comment/create',
             ]);
         }
 
@@ -46,7 +47,9 @@ class CommentsWidget extends Widget
             'user_id' => $user_id
         ]);
 
-        return $content;
+        return Html::tag('div', $content, [
+            'class' => 'pt-5'
+        ]);
     }
 
 }

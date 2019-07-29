@@ -62,4 +62,10 @@ class UserRepository extends IRepository
         $user = $this->_getBy($this->innerRecord, ['username' => $username]);
         return $user;
     }
+
+    public function getById($id)
+    {
+        $user = $this->_getBy($this->innerRecord, ['id' => $id]);
+        return $user;
+    }
 }

@@ -16,7 +16,7 @@ return [
             'csrfParam' => '_csrf-frontend',
         ],
         'user' => [
-            'identityClass' => 'common\essences\User',
+            'identityClass' => \common\essences\User::class,
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],
@@ -44,6 +44,8 @@ return [
                 'film/<id:\d+>' => 'film/view',
                 'name/<id:\d+>' => 'human/view',
                 'genre/<id:\d+>' => 'genre/view',
+                'profile/' => 'profile/index',
+                'profile/<id:\d+>' => 'profile/view',
                 '<alias:\w+>' => 'site/<alias>',
             ],
         ],
