@@ -4,6 +4,7 @@
 namespace common\services\similar;
 
 
+use InvalidArgumentException;
 use yii\db\ActiveQuery;
 
 class NameBuilder extends IBuilder
@@ -18,7 +19,7 @@ class NameBuilder extends IBuilder
     public function joinToQuery(ActiveQuery $query, array $condition): ActiveQuery
     {
         if (!isset($condition['title'])) {
-            throw new \InvalidArgumentException('Не указано название фильма');
+            throw new InvalidArgumentException('Не указано название фильма');
         }
         return $query->andWhere(['like', 'title', $condition['title']]);
     }

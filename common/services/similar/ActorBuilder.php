@@ -3,6 +3,7 @@
 namespace common\services\similar;
 
 use common\essences\FilmsActors;
+use InvalidArgumentException;
 use yii\db\ActiveQuery;
 
 class ActorBuilder extends IBuilder
@@ -17,7 +18,7 @@ class ActorBuilder extends IBuilder
     public function joinToQuery(ActiveQuery $query, array $condition): ActiveQuery
     {
         if (!isset($condition['id'])) {
-            throw new \InvalidArgumentException('Не указано айди режисера');
+            throw new InvalidArgumentException('Не указано айди режисера');
         }
         return $query->innerJoin(FilmsActors::tableName(), 'film.id=film_id AND actor_id='.$condition['id']);
     }

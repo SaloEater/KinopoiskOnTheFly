@@ -11,9 +11,7 @@ namespace common\services\similar;
 
 use common\essences\Human;
 use common\repositories\FilmRepository;
-use common\repositories\ProducerRepository;
-use common\services\FilmService;
-use yii\helpers\ArrayHelper;
+use Yii;
 
 class BestFilmsSearcher extends ISearcher
 {
@@ -24,7 +22,7 @@ class BestFilmsSearcher extends ISearcher
 
     public function search()
     {
-        $filmsIDs = \Yii::createObject(FilmRepository::class)->getTopIDsByHuman($this->human, $this->maximum);
+        $filmsIDs = Yii::createObject(FilmRepository::class)->getTopIDsByHuman($this->human, $this->maximum);
         return array_map(function ($item) {
             return $item['id'];
         }, $filmsIDs);

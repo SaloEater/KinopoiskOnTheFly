@@ -2,7 +2,8 @@
 
 namespace common\essences;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "comment".
@@ -19,7 +20,7 @@ use Yii;
  * @property Comment[] $comments
  * @property User $user
  */
-class Comment extends \yii\db\ActiveRecord
+class Comment extends ActiveRecord
 {
 
     public const TABLE_FILM = 1;
@@ -82,7 +83,7 @@ class Comment extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getParent()
     {
@@ -90,7 +91,7 @@ class Comment extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getComments()
     {
@@ -98,7 +99,7 @@ class Comment extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getUser()
     {

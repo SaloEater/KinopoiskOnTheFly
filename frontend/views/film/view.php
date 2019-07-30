@@ -1,17 +1,30 @@
 <?php
 
-/* @var $this \yii\web\View*/
-/* @var $film \common\essences\Film*/
+/* @var $this View*/
+/* @var $film Film*/
 
+use common\essences\Award;
+use common\essences\Comment;
+use common\essences\Film;
 use common\essences\Human;
+use common\services\similar\GenresSearcher;
+use common\services\similar\restrictors\PublishYearRestrictor;
+use common\widgets\CommentsWidget;
+use common\widgets\FavoriteIconWidget;
+use common\widgets\FullGenreListWidget;
 use common\widgets\MPAAWidget;
+use common\widgets\OneColumnViewWidget;
 use common\widgets\SimilarFilms;
 use common\widgets\UserRatingWidget;
+use frontend\assets\CommonAsset;
 use frontend\assets\TooltipAsset;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\web\View;
+use yii\widgets\DetailView;
+use yii\widgets\Pjax;
 
-\frontend\assets\CommonAsset::register($this);
+CommonAsset::register($this);
 $this->title = $film->title;
 TooltipAsset::register($this);
 
@@ -25,57 +38,90 @@ TooltipAsset::register($this);
     <div class="p-r-25 p-b-15">
         <?= Html::img($film->logo)?>
     </div>
-    <?=\yii\widgets\DetailView::widget([
-        'model' => $film,
-        'attributes' => [
-            [
-                'label' => 'Режисер',
-                'value' => Html::a($film->producer->name, Url::to(['/name/'.$film->producer->id])),
-                'format' => 'raw'
-            ],
-            'country',
-            'publish_year',
-            'duration',
-            [
-                'attribute' => 'tagline',
-                'contentOptions' => [
-                        'style' => [
-                                'color' => 'gray'
-                        ]
-                ]
-            ],
-            [
-                'label' => 'Жанры',
-                'value' => \common\widgets\FullGenreListWidget::widget([
-                    'source' => $film
-                ]),
-                'format' => 'raw',
-                'id' => 'genres'
-            ],
-            [
-                'attribute' => 'mraa_rating',
-                'value' => MPAAWidget::widget([
-                        'id' => $film->mraa_rating
-                ]),
-                'format' => 'raw'
-            ]
-        ],
-    ])?>
-    <div class="p-l-25">
-        <?=\yii\grid\GridView::widget([
-            'dataProvider' => new \yii\data\ArrayDataProvider([
-                'allModels' => $film->actors
-            ]),
-            'columns' => [
+    <div>
+        <?= DetailView::widget([
+            'model' => $film,
+            'attributes' => [
                 [
-                    'label' => 'Актеры',
-                    'value' => function (Human $item) {
-                        return Html::a($item->name, Url::to(['/name/'.$item->id]));
-                    },
+                    'label' => 'Режисер',
+                    'value' => Html::a($film->producer->name, Url::to(['/name/'.$film->producer->id])),
+                    'format' => 'raw'
+                ],
+                'country',
+                'publish_year',
+                'duration',
+                [
+                    'attribute' => 'tagline',
+                    'contentOptions' => [
+                        'style' => [
+                            'color' => 'gray'
+                        ]
+                    ]
+                ],
+                [
+                    'label' => 'Жанры',
+                    'value' => FullGenreListWidget::widget([
+                        'source' => $film
+                    ]),
+                    'format' => 'raw',
+                    'id' => 'genres'
+                ],
+                [
+                    'attribute' => 'mraa_rating',
+                    'value' => MPAAWidget::widget([
+                        'id' => $film->mraa_rating
+                    ]),
                     'format' => 'raw'
                 ]
             ],
-            'layout' => "{items}\n{pager}"
+        ])?>
+        <div class="d-flex justify-content-between">
+            <?= Html::a('Трейлер', $film->trailer_url, [
+                'class' => 'btn btn-secondary'
+            ])?>
+            <div>
+                <?php
+                    Pjax::begin([
+                        'id' => 'favorite',
+                        'submitEvent' => 'click'
+                    ]);
+                ?>
+                <?= FavoriteIconWidget::widget([
+                    'film_id' => $film->id
+                ]);
+                ?>
+                <?php
+                    Pjax::end();
+                ?>
+            </div>
+
+        </div>
+    </div>
+    <div class="p-l-25">
+
+        <?=OneColumnViewWidget::widget([
+            'models' => $film->actors,
+            'column' => [
+                'label' => 'Актеры',
+                'value' => function (Human $item) {
+                    return Html::a($item->name, Url::to(['/name/'.$item->id]));
+                },
+                'format' => 'raw'
+            ]
+        ])?>
+
+        <?=OneColumnViewWidget::widget([
+            'models' => $film->awards,
+            'column' => [
+                'label' => 'Награды',
+                'value' => function (Award $item) {
+                    return Html::img($item->icon, [
+                        'title' => $item->name,
+                        'data-toggle' => 'tooltip',
+                    ]);
+                },
+                'format' => 'raw'
+            ]
         ])?>
     </div>
 </div>
@@ -113,7 +159,7 @@ TooltipAsset::register($this);
     SimilarFilms::widget([
         'searchers' => [
             [
-                'class' => \common\services\similar\GenresSearcher::class,
+                'class' => GenresSearcher::class,
                 'config' => [
                     'film' => $film,
                     'maximum' => 5
@@ -122,7 +168,7 @@ TooltipAsset::register($this);
         ],
         'restrictors' => [
             [
-                'class' => \common\services\similar\restrictors\PublishYearRestrictor::class,
+                'class' => PublishYearRestrictor::class,
                 'config' => [
                     'year' => $film->publish_year
                 ]
@@ -133,8 +179,8 @@ TooltipAsset::register($this);
     ?>
 
     <?=
-        \common\widgets\CommentsWidget::widget([
-            'table_id' => \common\essences\Comment::TABLE_FILM,
+        CommentsWidget::widget([
+            'table_id' => Comment::TABLE_FILM,
             'page_id' => $film->id,
         ])
     ?>

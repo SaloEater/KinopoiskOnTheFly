@@ -3,17 +3,11 @@
 namespace frontend\controllers;
 
 use backend\models\FilmSearch;
-use common\essences\Film;
 use common\repositories\FilmRepository;
-use common\repositories\GenreRepository;
-use common\services\similar\GenreBuilder;
-use common\services\similar\GenresSearcher;
-use common\services\similar\NameBuilder;
-use common\services\similar\ProducerBuilder;
 use Yii;
-use yii\data\ActiveDataProvider;
+use yii\web\Controller;
 
-class FilmController extends \yii\web\Controller
+class FilmController extends Controller
 {
 
     private $filmRepository;

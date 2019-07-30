@@ -11,7 +11,6 @@ namespace common\widgets;
 
 use Yii;
 use yii\base\Widget;
-use yii\bootstrap4\Modal;
 use yii\helpers\Html;
 
 class ActionButtonWidget extends Widget

@@ -10,6 +10,7 @@ namespace common\services\similar\restrictors;
 
 use common\essences\Film;
 use common\repositories\FilmRepository;
+use Yii;
 use yii\base\BaseObject;
 
 abstract class IRestrictor extends BaseObject
@@ -18,7 +19,7 @@ abstract class IRestrictor extends BaseObject
 
     public function isValidWithID(int $filmId)
     {
-        $film = \Yii::createObject(FilmRepository::class)->getById($filmId);
+        $film = Yii::createObject(FilmRepository::class)->getById($filmId);
         return $this->isValid($film);
     }
 

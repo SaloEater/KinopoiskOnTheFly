@@ -1,8 +1,6 @@
 <?php
 namespace common\forms;
 
-use common\essences\User;
-use common\repositories\UserRepository;
 use yii\base\Model;
 
 /**

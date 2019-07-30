@@ -2,7 +2,6 @@
 namespace common\repositories;
 
 use common\essences\FilmsGenres;
-use yii\db\ActiveQuery;
 use yii\db\Query;
 
 class FilmsGenresRepository extends IRepository

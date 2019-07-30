@@ -2,7 +2,7 @@
 
 namespace common\essences;
 
-use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "mraa_rating".
@@ -13,7 +13,7 @@ use Yii;
  * @property string $tooltip
  *
  */
-class MraaRating extends \yii\db\ActiveRecord
+class MraaRating extends ActiveRecord
 {
 
     /**

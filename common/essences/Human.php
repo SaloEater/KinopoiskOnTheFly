@@ -2,7 +2,8 @@
 
 namespace common\essences;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "human".
@@ -18,7 +19,7 @@ use Yii;
  * @property FilmsActors[] $filmsActors
  * @property Film[] $films
  */
-class Human extends \yii\db\ActiveRecord
+class Human extends ActiveRecord
 {
     public const ROLE_PRODUCER = 1;
     public const ROLE_ACTOR = 2;
@@ -31,6 +32,9 @@ class Human extends \yii\db\ActiveRecord
             }
             case self::ROLE_ACTOR: {
                 return 'Актёр';
+            }
+            default: {
+                throw new \DomainException('Не указана роль');
             }
         }
     }
@@ -82,7 +86,7 @@ class Human extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getProducedFilms()
     {
@@ -90,7 +94,7 @@ class Human extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getFilmsActors()
     {
@@ -98,7 +102,8 @@ class Human extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
+     * @throws \yii\base\InvalidConfigException
      */
     public function getFilms()
     {

@@ -10,6 +10,7 @@ namespace common\widgets;
 
 use common\essences\MraaRating;
 use common\repositories\MPAARatingRepository;
+use Yii;
 use yii\base\Widget;
 use yii\helpers\Html;
 
@@ -20,7 +21,7 @@ class MPAAWidget extends Widget
     public function run()
     {
         /* @var $rating MraaRating*/
-        $rating = \Yii::createObject(MPAARatingRepository::class)->getById($this->id);
+        $rating = Yii::createObject(MPAARatingRepository::class)->getById($this->id);
         $content = Html::img($rating->icon, [
             'title' => $rating->tooltip,
             'data-toggle' => 'tooltip',

@@ -3,7 +3,9 @@
 /* @var $this yii\web\View */
 
 $this->title = 'My Yii Application';
-?>
+
+use yii\helpers\Html;
+use yii\helpers\Url; ?>
 <div class="site-index">
 
     <div class="jumbotron">
@@ -11,7 +13,7 @@ $this->title = 'My Yii Application';
 
         <p class="lead">You have successfully created your Yii-powered application.</p>
 
-        <p><?= \yii\helpers\Html::a('Список всех фильмов', \yii\helpers\Url::to(['film/index']), [
+        <p><?= Html::a('Список всех фильмов', Url::to(['film/index']), [
                 'class' => 'btn btn-lg btn-success'
             ])?></p>
     </div>
@@ -23,7 +25,7 @@ $this->title = 'My Yii Application';
 
                 <p>10 случайных фильмов</p>
 
-                <p><?= \yii\helpers\Html::a('Перейти', '', [
+                <p><?= Html::a('Перейти', '', [
                         'class' => "btn btn-default"
                     ])?></p>
             </div>
@@ -31,7 +33,7 @@ $this->title = 'My Yii Application';
 
                 <p>10 случайных жанров</p>
 
-                <p><?= \yii\helpers\Html::a('Перейти', '', [
+                <p><?= Html::a('Перейти', '', [
                         'class' => "btn btn-default"
                     ])?></p>
             </div>
@@ -39,7 +41,7 @@ $this->title = 'My Yii Application';
 
                 <p>10 случайных режиссеров</p>
 
-                <p><?= \yii\helpers\Html::a('Перейти', '', [
+                <p><?= Html::a('Перейти', '', [
                         'class' => "btn btn-default"
                     ])?></p>
             </div>

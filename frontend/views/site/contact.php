@@ -2,8 +2,9 @@
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap4\ActiveForm */
-/* @var $model \frontend\forms\ContactForm */
+/* @var $model ContactForm */
 
+use frontend\forms\ContactForm;
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 use yii\captcha\Captcha;

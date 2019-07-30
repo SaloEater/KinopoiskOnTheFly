@@ -10,6 +10,7 @@ namespace common\repositories;
 
 
 use common\essences\Comment;
+use DomainException;
 
 class CommentRepository extends IRepository
 {
@@ -56,7 +57,7 @@ class CommentRepository extends IRepository
     public function save(Comment $comment)
     {
         if (!$comment->save()) {
-            throw new \DomainException('Ошибка при сохранении');
+            throw new DomainException('Ошибка при сохранении');
         }
     }
 }

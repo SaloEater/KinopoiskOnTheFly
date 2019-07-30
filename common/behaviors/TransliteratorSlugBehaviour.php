@@ -3,6 +3,7 @@
 namespace common\behaviors;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\behaviors\SluggableBehavior;
 use yii\db\BaseActiveRecord;
 use yii\helpers\Inflector;
@@ -66,10 +67,12 @@ class TransliteratorSlugBehaviour extends SluggableBehavior
         }
         return $slug;
     }
+
     /**
      * Checks if given slug value is unique.
      * @param string $slug slug value
      * @return boolean whether slug is unique.
+     * @throws InvalidConfigException
      */
     protected  function validateSlug($slug)
     {
@@ -92,7 +95,6 @@ class TransliteratorSlugBehaviour extends SluggableBehavior
      * @param string $baseSlug base slug value
      * @param integer $iteration iteration number
      * @return string new slug value
-     * @throws \yii\base\InvalidConfigException
      */
     protected function generateUniqueSlug($baseSlug, $iteration)
     {

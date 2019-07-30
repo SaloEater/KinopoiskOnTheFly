@@ -13,6 +13,7 @@ use common\essences\ActorList;
 use common\essences\Film;
 use common\essences\FilmsActors;
 use common\repositories\FilmsActorsRepository;
+use DomainException;
 
 class FilmsActorsService
 {
@@ -46,7 +47,7 @@ class FilmsActorsService
     public function save(FilmsActors $filmsActors)
     {
         if (!$filmsActors->save()) {
-            throw new \DomainException('Ошибка при сохранении ' . $filmsActors::className());
+            throw new DomainException('Ошибка при сохранении ' . $filmsActors::className());
         }
     }
 }

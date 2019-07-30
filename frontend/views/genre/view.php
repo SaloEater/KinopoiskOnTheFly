@@ -1,13 +1,19 @@
 <?php
 
-/* @var $this \yii\web\View*/
-/* @var $genre \common\essences\Genre*/
+/* @var $this View*/
+/* @var $genre Genre*/
 
+use common\essences\Comment;
+use common\essences\Genre;
 use common\helpers\StringHelper;
+use common\services\similar\GenreSearcher;
+use common\widgets\CommentsWidget;
 use common\widgets\SimilarFilms;
+use frontend\assets\CommonAsset;
 use yii\helpers\Html;
+use yii\web\View;
 
-\frontend\assets\CommonAsset::register($this);
+CommonAsset::register($this);
 $this->title = StringHelper::ucfirst($genre->name);
 ?>
 
@@ -19,7 +25,7 @@ $this->title = StringHelper::ucfirst($genre->name);
 SimilarFilms::widget([
     'searchers' => [
         [
-            'class' => \common\services\similar\GenreSearcher::class,
+            'class' => GenreSearcher::class,
             'config' => [
                 'genre' => $genre
             ]
@@ -31,8 +37,8 @@ SimilarFilms::widget([
 ?>
 
 <?=
-\common\widgets\CommentsWidget::widget([
-    'table_id' => \common\essences\Comment::TABLE_GENRE,
+CommentsWidget::widget([
+    'table_id' => Comment::TABLE_GENRE,
     'page_id' => $genre->id,
 ])
 ?>

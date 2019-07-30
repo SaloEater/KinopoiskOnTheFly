@@ -2,7 +2,8 @@
 
 namespace common\essences;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "film".
@@ -19,6 +20,7 @@ use Yii;
  * @property int $mraa_rating
  * @property string $description
  * @property string $tagline
+ * @property string $trailer_url
  *
  * @property Human $producer
  * @property FilmsActors[] $filmsActors
@@ -29,8 +31,10 @@ use Yii;
  * @property UserRating[] $userRatings
  * @property UsersFavoriteFilms[] $usersFavoriteFilms
  * @property User[] $users
+ * @property Award[] $awards
+ * @property FilmsAwards[] $filmsAwards
  */
-class Film extends \yii\db\ActiveRecord
+class Film extends ActiveRecord
 {
 
     public const RATING_G = 1;
@@ -57,7 +61,7 @@ class Film extends \yii\db\ActiveRecord
             [['rating', 'user_rating', 'mraa_rating'], 'number'],
             [['duration'], 'safe'],
             [['title', 'country'], 'string', 'max' => 64],
-            [['logo', 'tagline'], 'string', 'max' => 128],
+            [['logo', 'tagline', 'trailer_url'], 'string', 'max' => 128],
             [['description'], 'string'],
             [['producer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Human::className(), 'targetAttribute' => ['producer_id' => 'id']],
         ];
@@ -85,7 +89,7 @@ class Film extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getFilmsAwards()
     {
@@ -93,7 +97,8 @@ class Film extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
+     * @throws \yii\base\InvalidConfigException
      */
     public function getAwards()
     {
@@ -101,7 +106,7 @@ class Film extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getFilmsGenres()
     {
@@ -115,7 +120,7 @@ class Film extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getProducer()
     {
@@ -123,7 +128,7 @@ class Film extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getFilmsActors()
     {
@@ -131,7 +136,8 @@ class Film extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
+     * @throws \yii\base\InvalidConfigException
      */
     public function getActors()
     {
@@ -139,7 +145,7 @@ class Film extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getMraaRating()
     {
@@ -147,7 +153,7 @@ class Film extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getFilmsUserRatings()
     {
@@ -155,7 +161,8 @@ class Film extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
+     * @throws \yii\base\InvalidConfigException
      */
     public function getUserRatings()
     {
@@ -163,7 +170,7 @@ class Film extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getUsersFavoriteFilms()
     {
@@ -171,7 +178,8 @@ class Film extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
+     * @throws \yii\base\InvalidConfigException
      */
     public function getUsers()
     {

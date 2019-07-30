@@ -1,6 +1,10 @@
 <?php
 
+use common\essences\ActorList;
+use common\essences\AwardList;
+use common\essences\GenreList;
 use common\helpers\ActorHelper;
+use common\helpers\AwardHelper;
 use common\helpers\FilmHelper;
 use common\helpers\GenreHelper;
 use common\services\ProducerService;
@@ -10,8 +14,9 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model common\essences\Film */
 /* @var $form yii\widgets\ActiveForm */
-/* @var $genreList \common\essences\GenreList*/
-/* @var $actorList \common\essences\ActorList*/
+/* @var $genreList GenreList*/
+/* @var $actorList ActorList*/
+/* @var $awardList AwardList*/
 ?>
 
 <div class="film-form">
@@ -37,6 +42,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'tagline')->textInput() ?>
 
+    <?= $form->field($model, 'trailer_url')->textInput() ?>
+
     <?= $form->field($model, 'user_rating')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'mraa_rating')
@@ -50,6 +57,11 @@ use yii\widgets\ActiveForm;
     <?=
         $form->field($actorList, 'actors')
             ->checkboxList(ActorHelper::prepareArrayForDropdown())->label('Выберите актеров');
+    ?>
+
+    <?=
+        $form->field($awardList, 'awards')
+            ->checkboxList(AwardHelper::prepareArrayForDropdown())->label('Выберите награды');
     ?>
 
     <div class="form-group">

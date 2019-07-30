@@ -7,6 +7,7 @@ namespace common\widgets;
 use common\essences\Film;
 use common\essences\GenreList;
 use common\essences\Human;
+use InvalidArgumentException;
 use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -23,7 +24,7 @@ class FullGenreListWidget extends Widget
         } else if ($this->source instanceof Human) {
             $genreList = GenreList::fromHuman($this->source);
         } else {
-            throw new \InvalidArgumentException('Неправильный источник для выборки жанров');
+            throw new InvalidArgumentException('Неправильный источник для выборки жанров');
         }
         $genres = $genreList->genres;
 

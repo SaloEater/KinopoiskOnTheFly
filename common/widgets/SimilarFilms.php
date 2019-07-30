@@ -2,16 +2,13 @@
 
 namespace common\widgets;
 
-use common\essences\Film;
-use common\helpers\ArrayHelper;
 use common\repositories\FilmRepository;
 use common\services\similar\ISearcher;
 use common\services\similar\restrictors\IRestrictor;
+use Yii;
 use yii\base\Widget;
 use yii\data\ArrayDataProvider;
-use yii\grid\GridView;
 use yii\helpers\Html;
-use yii\helpers\Url;
 
 class SimilarFilms extends Widget
 {
@@ -89,8 +86,8 @@ class SimilarFilms extends Widget
             $filmIDs = $newIDs;
         }
 
-        $filmIDs = ArrayHelper::Rand($filmIDs, $this->maximum);
-        //$filmIDs = array_slice($filmIDs, 0, $this->maximum);
+        //$filmIDs = ArrayHelper::Rand($filmIDs, $this->maximum);
+        $filmIDs = array_slice($filmIDs, 0, $this->maximum);
 
         $content = '';
         switch($this->display){
@@ -126,7 +123,7 @@ class SimilarFilms extends Widget
 
     private function displayAsGrid(array $filmIDs)
     {
-        $films = \Yii::createObject(FilmRepository::class)->findByIDs($filmIDs);
+        $films = Yii::createObject(FilmRepository::class)->findByIDs($filmIDs);
         $dataProvider = new ArrayDataProvider([
             'allModels' => $films,
             'sort' => [

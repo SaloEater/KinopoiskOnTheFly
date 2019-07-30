@@ -11,6 +11,7 @@ namespace common\widgets;
 
 use common\essences\Film;
 use common\repositories\FilmRepository;
+use Yii;
 use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -26,7 +27,7 @@ class SmallFilmViewWidget extends Widget
     {
         parent::init();
         if (!$this->film) {
-            $this->film = \Yii::createObject(FilmRepository::class)->getById($this->filmId);
+            $this->film = Yii::createObject(FilmRepository::class)->getById($this->filmId);
         }
     }
 

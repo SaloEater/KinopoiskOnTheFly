@@ -2,11 +2,8 @@
 
 namespace common\services\similar;
 
-use common\essences\Film;
-use common\helpers\ArrayHelper;
-use common\repositories\FilmRepository;
 use common\services\FilmsGenresService;
-use yii\base\BaseObject;
+use Yii;
 
 class GenresSearcher extends ISearcher
 {
@@ -19,7 +16,7 @@ class GenresSearcher extends ISearcher
         $genres = \yii\helpers\ArrayHelper::getColumn($this->film->genres, 'id');
 
         $length = count($genres);
-        $filmsGenresService = \Yii::createObject(FilmsGenresService::class);
+        $filmsGenresService = Yii::createObject(FilmsGenresService::class);
 
         $filmIDs = [];
         for ($i = $length - 1; $i >= 0; $i--) {

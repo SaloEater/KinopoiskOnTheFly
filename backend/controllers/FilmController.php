@@ -3,9 +3,10 @@
 namespace backend\controllers;
 
 use common\essences\ActorList;
+use common\essences\AwardList;
 use common\essences\GenreList;
-use common\repositories\FilmsActorsRepository;
 use common\services\FilmsActorsService;
+use common\services\FilmsAwardsService;
 use common\services\FilmsGenresService;
 use Yii;
 use common\essences\Film;
@@ -21,17 +22,21 @@ class FilmController extends Controller
 {
 
     private $filmsGenresService;
-
     private $filmsActorsService;
+    private $filmsAwardsService;
+
 
     public function __construct($id, $module,
         FilmsGenresService $filmsGenresService,
         FilmsActorsService $filmsActorsService,
+        FilmsAwardsService $filmsAwardsService,
         $config = [])
     {
         parent::__construct($id, $module, $config);
         $this->filmsGenresService = $filmsGenresService;
         $this->filmsActorsService = $filmsActorsService;
+        $this->filmsAwardsService = $filmsAwardsService;
+
     }
 
     /**
@@ -87,10 +92,16 @@ class FilmController extends Controller
         $film = new Film();
         $genreList = new GenreList();
         $actorList = new ActorList();
+        $awardList = new AwardList();
 
-        if ($film->load(Yii::$app->request->post()) && $genreList->load(Yii::$app->request->post()) && $actorList->load(Yii::$app->request->post()) && $film->save()) {
+        if ($film->load(Yii::$app->request->post())
+            && $genreList->load(Yii::$app->request->post())
+            && $actorList->load(Yii::$app->request->post())
+            && $awardList->load(Yii::$app->request->post())
+            && $film->save()) {
             $this->filmsGenresService->assignGenresToFilm($genreList, $film);
             $this->filmsActorsService->assignActorsToFilm($actorList, $film);
+            $this->filmsAwardsService->assignAwardsToFilm($awardList, $film);
             //return $this->redirect(['view', 'id' => $film->id]);
             return $this->refresh();
         }
@@ -98,7 +109,8 @@ class FilmController extends Controller
         return $this->render('create', [
             'model' => $film,
             'genreList' => $genreList,
-            'actorList' => $actorList
+            'actorList' => $actorList,
+            'awardList' => $awardList
         ]);
     }
 
@@ -112,12 +124,18 @@ class FilmController extends Controller
     public function actionUpdate($id)
     {
         $film = $this->findModel($id);
-        $genreList = GenreList::fromFilm($film);//$this->filmsGenresService->from($film);
+        $genreList = GenreList::fromFilm($film);
         $actorList = ActorList::fromFilm($film);
+        $awardList = AwardList::fromFilm($film);
 
-        if ($film->load(Yii::$app->request->post()) && $genreList->load(Yii::$app->request->post()) && $actorList->load(Yii::$app->request->post()) && $film->save()) {
+        if ($film->load(Yii::$app->request->post())
+            && $genreList->load(Yii::$app->request->post())
+            && $actorList->load(Yii::$app->request->post())
+            && $awardList->load(Yii::$app->request->post())
+            && $film->save()) {
             $this->filmsGenresService->assignGenresToFilm($genreList, $film);
             $this->filmsActorsService->assignActorsToFilm($actorList, $film);
+            $this->filmsAwardsService->assignAwardsToFilm($awardList, $film);
             //return $this->redirect(['view', 'id' => $film->id]);
             return $this->redirect('index');
         }
@@ -125,7 +143,8 @@ class FilmController extends Controller
         return $this->render('create', [
             'model' => $film,
             'genreList' => $genreList,
-            'actorList' => $actorList
+            'actorList' => $actorList,
+            'awardList' => $awardList
         ]);
     }
 
@@ -135,6 +154,8 @@ class FilmController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {

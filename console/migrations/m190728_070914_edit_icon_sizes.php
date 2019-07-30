@@ -21,8 +21,6 @@ class m190728_070914_edit_icon_sizes extends Migration
      */
     public function safeDown()
     {
-        echo "m190728_070914_edit_icon_sizes cannot be reverted.\n";
 
-        return false;
     }
 }

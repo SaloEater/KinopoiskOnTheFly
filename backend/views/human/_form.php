@@ -1,7 +1,7 @@
 <?php
 
-use common\essences\Human;
 use common\helpers\HumanHelper;
+use kartik\date\DatePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'role_id')->dropDownList(HumanHelper::rolesArrayForDropdown()) ?>
 
-    <?= $form->field($model, 'birth_day')->widget(\kartik\date\DatePicker::class,[
+    <?= $form->field($model, 'birth_day')->widget(DatePicker::class,[
         'name' => 'День рождения',
         'value' => date('d-m-Y', strtotime('+2 days')),
         'options' => ['placeholder' => 'Укажите дату'],

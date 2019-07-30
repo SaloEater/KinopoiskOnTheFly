@@ -4,7 +4,6 @@ namespace common\repositories;
 
 use common\essences\Film;
 use common\essences\Human;
-use Yii;
 use yii\db\Query;
 
 class ProducerRepository extends HumanRepository

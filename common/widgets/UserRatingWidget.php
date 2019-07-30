@@ -10,7 +10,6 @@ namespace common\widgets;
 
 
 use yii\base\Widget;
-use yii\widgets\Pjax;
 
 class UserRatingWidget extends Widget
 {

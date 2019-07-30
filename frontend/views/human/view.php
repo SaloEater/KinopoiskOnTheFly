@@ -1,16 +1,31 @@
 <?php
 
-/* @var $this \yii\web\View*/
-/* @var $human \common\essences\Human*/
+/* @var $this View*/
+/* @var $human Human*/
 
-\frontend\assets\CommonAsset::register($this);
+CommonAsset::register($this);
 
+use common\essences\Award;
+use common\essences\Comment;
+use common\essences\Human;
+use common\helpers\DateHelper;
+use common\helpers\HumanHelper;
 use common\services\FilmService;
+use common\services\similar\BestFilmsSearcher;
+use common\widgets\CommentsWidget;
+use common\widgets\FullGenreListWidget;
+use common\widgets\OneColumnViewWidget;
+use common\widgets\OnelineFilmsListWidget;
 use common\widgets\SimilarFilms;
+use frontend\assets\CommonAsset;
+use frontend\assets\TooltipAsset;
 use yii\helpers\Html;
+use yii\web\View;
+use yii\widgets\DetailView;
+
 $this->title = $human->name;
 
-\frontend\assets\CommonAsset::register($this);
+TooltipAsset::register($this);
 
 ?>
 
@@ -21,7 +36,7 @@ $this->title = $human->name;
     <div class="p-r-25 p-b-15">
         <?= Html::img($human->logo)?>
     </div>
-    <?=\yii\widgets\DetailView::widget([
+    <?= DetailView::widget([
         'model' => $human,
         'attributes' => [
             [
@@ -30,33 +45,47 @@ $this->title = $human->name;
             ],
             [
                 'label' => 'Список жанров',
-                'value' => \common\widgets\FullGenreListWidget::widget([
+                'value' => FullGenreListWidget::widget([
                     'source' => $human
                 ]),
                 'format' => 'raw'
             ],
             [
                 'label' => 'Список фильмов',
-                'value' => \common\widgets\OnelineFilmsListWidget::widget([
+                'value' => OnelineFilmsListWidget::widget([
                     'films' => Yii::createObject(FilmService::class)->getByHuman($human)
                 ]),
                 'format' => 'raw'
             ],
             [
                 'attribute' => 'birth_day',
-                'value' => \common\helpers\DateHelper::dateString($human->birth_day)
+                'value' => DateHelper::dateString($human->birth_day)
             ],
             'birth_place',
         ],
     ])?>
-
+    <div class="p-l-25">
+    <?=OneColumnViewWidget::widget([
+        'models' => HumanHelper::findAwardsFor($human),
+        'column' => [
+            'label' => 'Награды',
+            'value' => function (Award $item) {
+                return Html::img($item->icon, [
+                    'title' => $item->name,
+                    'data-toggle' => 'tooltip',
+                ]);
+            },
+            'format' => 'raw'
+        ]
+    ])?>
+    </div>
 </div>
 
 <?=
 SimilarFilms::widget([
     'searchers' => [
         [
-            'class' => \common\services\similar\BestFilmsSearcher::class,
+            'class' => BestFilmsSearcher::class,
             'config' => [
                 'human' => $human,
                 'maximum' => 5
@@ -69,8 +98,8 @@ SimilarFilms::widget([
 ?>
 
 <?=
-\common\widgets\CommentsWidget::widget([
-    'table_id' => \common\essences\Comment::TABLE_HUMAN,
+CommentsWidget::widget([
+    'table_id' => Comment::TABLE_HUMAN,
     'page_id' => $human->id,
 ])
 ?>

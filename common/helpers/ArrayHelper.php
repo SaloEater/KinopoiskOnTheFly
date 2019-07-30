@@ -32,7 +32,6 @@ class ArrayHelper
 
     /**
      * @param array $array
-     * @param $column
      * @param int $maximum
      * @return array|mixed
      */

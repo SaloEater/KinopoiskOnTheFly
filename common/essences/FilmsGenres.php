@@ -2,7 +2,8 @@
 
 namespace common\essences;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "films_genres".
@@ -13,7 +14,7 @@ use Yii;
  * @property Film $film
  * @property Genre $genre
  */
-class FilmsGenres extends \yii\db\ActiveRecord
+class FilmsGenres extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -49,7 +50,7 @@ class FilmsGenres extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getFilm()
     {
@@ -57,7 +58,7 @@ class FilmsGenres extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getGenre()
     {

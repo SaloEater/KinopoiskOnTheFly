@@ -11,6 +11,7 @@ namespace common\services;
 
 use common\essences\Human;
 use common\repositories\FilmRepository;
+use InvalidArgumentException;
 
 class FilmService
 {

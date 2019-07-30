@@ -1,16 +1,17 @@
 <?php
 
-/* @var $this \yii\web\View */
+/* @var $this View */
 /* @var $content string */
 
+use frontend\assets\FontAwesomeAsset;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 use yii\helpers\Html;
-use yii\widgets\Breadcrumbs;
+use yii\web\View;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
 AppAsset::register($this);
-\frontend\assets\FontAwesomeAsset::register($this);
+FontAwesomeAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -62,7 +63,7 @@ AppAsset::register($this);
     ?>
 
     <div class="container">
-        <?= Breadcrumbs::widget([
+        <?= \yii\bootstrap4\Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>

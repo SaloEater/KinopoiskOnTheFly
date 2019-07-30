@@ -3,6 +3,7 @@
 namespace common\essences;
 
 use common\services\FilmService;
+use Yii;
 use yii\base\Model;
 
 class GenreList extends Model
@@ -27,7 +28,7 @@ class GenreList extends Model
     {
         $genreList = new static();
 
-        $films = \Yii::createObject(FilmService::class)->getByHuman($human);
+        $films = Yii::createObject(FilmService::class)->getByHuman($human);
 
         foreach ($films as $film)
         {

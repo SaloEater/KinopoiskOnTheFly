@@ -5,6 +5,7 @@ use common\essences\Film;
 use common\essences\FilmsGenres;
 use common\essences\GenreList;
 use common\repositories\FilmsGenresRepository;
+use DomainException;
 
 class FilmsGenresService
 {
@@ -38,7 +39,7 @@ class FilmsGenresService
     public function save(FilmsGenres $filmsGenres)
     {
         if (!$filmsGenres->save()) {
-            throw new \DomainException('Ошибка при сохранении ' . $filmsGenres::className());
+            throw new DomainException('Ошибка при сохранении ' . $filmsGenres::className());
         }
     }
 

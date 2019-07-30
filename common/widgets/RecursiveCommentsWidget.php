@@ -11,6 +11,7 @@ namespace common\widgets;
 
 use common\essences\Comment;
 use common\repositories\CommentRepository;
+use Yii;
 use yii\base\Widget;
 
 class RecursiveCommentsWidget extends Widget
@@ -30,7 +31,7 @@ class RecursiveCommentsWidget extends Widget
         $content = '';
 
         /* @var $comments Comment[]*/
-        $comments = \Yii::createObject(CommentRepository::class)->findByPageAndParent($this->table_id, $this->page_id, $this->parent_id);
+        $comments = Yii::createObject(CommentRepository::class)->findByPageAndParent($this->table_id, $this->page_id, $this->parent_id);
 
         foreach ($comments as $comment) {
             $content .= CommentViewWidget::widget([

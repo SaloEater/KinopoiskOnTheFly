@@ -38,3 +38,8 @@ table img {
 .color-white {
     color: white;
 }
+
+.grid-big-images img {
+    max-height: 200%;
+    cursor:default;
+}

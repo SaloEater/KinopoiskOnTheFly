@@ -8,9 +8,10 @@
 
 /* @var $title*/
 /* @var $link*/
-/* @var $model \common\essences\Comment*/
+/* @var $model Comment*/
 /* @var $action*/
 
+use common\essences\Comment;
 use yii\bootstrap4\Modal;
 
 Modal::begin([
@@ -27,6 +28,6 @@ echo $this->render('@frontend/views/comment/_form', [
     'action' => $action
 ]);
 Modal::end();
-?>
+
 
 

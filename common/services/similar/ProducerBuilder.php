@@ -5,6 +5,7 @@ namespace common\services\similar;
 
 
 use common\essences\Human;
+use InvalidArgumentException;
 use yii\db\ActiveQuery;
 
 class ProducerBuilder extends IBuilder
@@ -19,7 +20,7 @@ class ProducerBuilder extends IBuilder
     public function joinToQuery(ActiveQuery $query, array $condition): ActiveQuery
     {
         if (!isset($condition['id'])) {
-            throw new \InvalidArgumentException('Не указано айди режисера');
+            throw new InvalidArgumentException('Не указано айди режисера');
         }
         return $query->innerJoin(Human::tableName(), 'producer_id = human.id AND human.id='.$condition['id']);
     }

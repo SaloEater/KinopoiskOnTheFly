@@ -9,9 +9,11 @@
 /* @var $filterModel backend\models\FilmSearch */
 /* @var $dataProvider yii\data\BaseDataProvider */
 
-use yii\widgets\Pjax; ?>
+use common\widgets\FilmGridViewWidget;
 
-<?= \common\widgets\FilmGridViewWidget::widget([
+?>
+
+<?= FilmGridViewWidget::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $filterModel
 ]);

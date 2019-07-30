@@ -10,7 +10,6 @@ namespace common\services\similar;
 
 
 use common\essences\Genre;
-use common\repositories\GenreRepository;
 use yii\helpers\ArrayHelper;
 
 class GenreSearcher extends ISearcher

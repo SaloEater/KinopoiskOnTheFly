@@ -2,7 +2,8 @@
 
 namespace common\essences;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "award".
@@ -14,7 +15,7 @@ use Yii;
  * @property FilmsAwards[] $filmsAwards
  * @property Film[] $films
  */
-class Award extends \yii\db\ActiveRecord
+class Award extends ActiveRecord
 {
 
 
@@ -49,7 +50,7 @@ class Award extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getFilmsAwards()
     {
@@ -57,10 +58,16 @@ class Award extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
+     * @throws \yii\base\InvalidConfigException
      */
     public function getFilms()
     {
         return $this->hasMany(Film::className(), ['id' => 'film_id'])->viaTable('films_awards', ['award_id' => 'id']);
+    }
+
+    public function __toString()
+    {
+        return (string)$this->id;
     }
 }

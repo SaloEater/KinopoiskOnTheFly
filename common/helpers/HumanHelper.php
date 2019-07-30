@@ -13,4 +13,22 @@ class HumanHelper
             Human::ROLE_ACTOR => 'Актер',
         ];
     }
+
+    public static function findAwardsFor(Human $human)
+    {
+        $films = [];
+        if ($human->isActor()) {
+            $films = $human->films;
+        } else if ($human->isProducer()) {
+            $films = $human->producedFilms;
+        }
+
+        $awards = [];
+        foreach ($films as $film) {
+            $awards = array_merge($film->awards, $awards);
+        }
+        $awards = array_unique($awards);
+
+        return $awards;
+    }
 }

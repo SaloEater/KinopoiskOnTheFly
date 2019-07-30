@@ -15,9 +15,7 @@ use common\repositories\CommentRepository;
 use common\services\CommentService;
 use Yii;
 use yii\base\Module;
-use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\helpers\Url;
 use yii\web\Controller;
 
 class CommentController extends Controller

@@ -2,7 +2,8 @@
 
 namespace common\essences;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "films_user_ratings".
@@ -13,7 +14,7 @@ use Yii;
  * @property Film $film
  * @property UserRating $userRating
  */
-class FilmsUserRatings extends \yii\db\ActiveRecord
+class FilmsUserRatings extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -49,7 +50,7 @@ class FilmsUserRatings extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getFilm()
     {
@@ -57,7 +58,7 @@ class FilmsUserRatings extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getUserRating()
     {
