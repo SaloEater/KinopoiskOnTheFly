@@ -111,25 +111,20 @@ class FilmRepositoryTest extends Unit
         $idArray = $this->filmRepository->getTopIDsByHuman($producer, 2);
         $this->assertNotEmpty($idArray);
         $this->assertCount(2, $idArray);
-
-        $this->assertEquals($film_1->id, $idArray[0]);
-        $this->assertEquals($film_2->id, $idArray[1]);
+        $this->assertEquals($film_1->id, $idArray[0]['id']);
+        $this->assertEquals($film_2->id, $idArray[1]['id']);
     }
 
-    public function testGetTopIDsByActor()
+    public function testGetTopIdsByActor()
     {
         $film_1 = Film::findOne(['title' => $this->tester->grabFixture('film', 0)['title']]);
-        $film_2 = Film::findOne(['title' => $this->tester->grabFixture('film', 1)['title']]);
 
         $actor = Human::findOne(['role_id' => Human::ROLE_ACTOR]);
         $idArray = $this->filmRepository->getTopIDsByHuman($actor, 1);
         $this->assertNotEmpty($idArray);
         $this->assertCount(1, $idArray);
-        $idArray = $this->filmRepository->getTopIDsByHuman($actor, 2);
-        $this->assertNotEmpty($idArray);
-        $this->assertCount(2, $idArray);
 
-        $this->assertEquals($film_1->id, $idArray[0]);
-        $this->assertEquals($film_2->id, $idArray[1]);
+
+        $this->assertEquals($film_1->id, $idArray[0]['id']);
     }
 }
